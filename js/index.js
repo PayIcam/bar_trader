@@ -73,6 +73,7 @@ function sauvegarder()
         if(prix_minimal == ""){return false;}
         if(prix_revient == ""){return false;}
 
+        // Ajout d'une ligne au tableau
         var boisson = {};
         boisson["nom"]                = nom;
         boisson["prix_vente_calcule"] = prix_initial;
@@ -85,6 +86,8 @@ function sauvegarder()
 
         boissons[id] = boisson;
     }
+
+    
 
     alert(JSON.stringify(boissons));
     return true;

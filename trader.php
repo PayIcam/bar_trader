@@ -2,7 +2,7 @@
 
 session_start();
 
-$_SESSION['datetime'] = $_POST['date'] . " " . $_POST['time'];
+//$_SESSION['datetime'] = $_POST['date'] . " " . $_POST['time'];
 
 $_SESSION['val0'] = 0;
 $_SESSION['val1'] = 0;
