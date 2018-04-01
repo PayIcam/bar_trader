@@ -14,6 +14,12 @@ session_start();
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <link rel="stylesheet" href="css/style.css" />
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="text/javascript">
+          google.charts.load('current', {packages: ['corechart']});
+          google.charts.setOnLoadCallback(drawChart);
+        </script>       
+
     </head>
 
     <body>
@@ -43,6 +49,49 @@ session_start();
                     <div id="fenetre">
                         <div id="affichage0" class="affichage">
                             Affichage0
+                              <div id="chart_div"></div>
+                              <script type="text/javascript" >
+                                  
+google.charts.load('current', {packages: ['corechart', 'line']});
+google.charts.setOnLoadCallback(drawLineColors);
+
+function drawLineColors() {
+      var data = new google.visualization.DataTable();
+      data.addColumn('number', 'X');
+      data.addColumn('number', 'Bière1');
+      data.addColumn('number', 'Bière2');
+
+      data.addRows([
+        [0, 0, 0],    
+        [1, 10, 5],   
+        [2, 23, 15],  
+        [3, 17, 9],   
+        [4, 18, 10],  
+        [5, 9, 5],
+        [6, 11, 3],   
+        [7, 27, 19],  
+        [8, 33, 25],  
+        [9, 40, 32],  
+        [10, 32, 24],
+      ]);
+
+      var options = {
+        hAxis: {
+          title: 'Temps'
+        },
+        vAxis: {
+          title: 'Ventes'
+        },
+        colors: ['#a52714', '#097138']
+      };
+
+      var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+      chart.draw(data, options);
+    }
+                              </script>
+                              
+      
+
                         </div>
 
                         <div id="affichage1" class="affichage">
