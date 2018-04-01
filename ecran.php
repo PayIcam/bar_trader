@@ -2,19 +2,6 @@
 
 session_start();
 
-$_SESSION['val0'] = 0;
-$_SESSION['val1'] = 0;
-$_SESSION['val2'] = 0;
-$_SESSION['val3'] = 0;
-$_SESSION['val4'] = 0;
-$_SESSION['val5'] = 0;
-$_SESSION['val6'] = 0;
-$_SESSION['val7'] = 0;
-$_SESSION['val8'] = 0;
-$_SESSION['val9'] = 0;
-$_SESSION['val10'] = 0;
-$_SESSION['val11'] = 0;
-
 ?>
 
 <!DOCTYPE html>
@@ -25,7 +12,7 @@ $_SESSION['val11'] = 0;
         <title>Trader - Ecran</title>
 
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-        <link rel="stylesheet" href="css/style.css" />
+        <link rel="stylesheet" href="css/ecran.css" />
         <link rel="shortcut icon" type="image/x-icon" href="img/logo.png" />
     </head>
 
@@ -134,7 +121,6 @@ $_SESSION['val11'] = 0;
         <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
 
-        <script type="text/javascript" src="js/oXHR.js"></script>
         <script type="text/javascript" src="js/ecran.js"></script>
     </body>
 </html>

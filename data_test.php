@@ -25,7 +25,7 @@ echo "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
 
 echo "<root>";
 
-for($i = 0; $i < 11; $i++){
+for($i = 0; $i < 12; $i++){
 	echo "<row id='" . $ar2[$i] . "' nombre_vendu='" . $ar1[$i] . "' />";
 }
 

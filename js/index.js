@@ -96,8 +96,8 @@ function sauvegarder()
     if(document.getElementById("date_debut").value == ""){return "Veillez saisir une date de début";}
     if(document.getElementById("heure_fin").value == ""){return "Veillez saisir une heure de fin";}
     if(document.getElementById("date_fin").value == ""){return "Veillez saisir une date de fin";}
-    if(document.getElementById("date_fin").value < document.getElementById("date_debut").value){return "La date de fin doit être supérieure à celle de début";}
-    else if(document.getElementById("heure_fin").value <= document.getElementById("heure_debut").value){return "L'heure de fin doit être supérieure à celle de début";}
+    //if(document.getElementById("date_fin").value < document.getElementById("date_debut").value){return "La date de fin doit être supérieure à celle de début";}
+    //else if(document.getElementById("heure_fin").value <= document.getElementById("heure_debut").value){return "L'heure de fin doit être supérieure à celle de début";}
 
     // Récupération des valeurs diverses
     var benefice_max = document.getElementById("benefice_max").value;
