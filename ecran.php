@@ -1,8 +1,6 @@
-<?php 
+<?php
 
 session_start();
-
-//$_SESSION['datetime'] = $_POST['date'] . " " . $_POST['time'];
 
 $_SESSION['val0'] = 0;
 $_SESSION['val1'] = 0;
@@ -24,17 +22,18 @@ $_SESSION['val11'] = 0;
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Trader</title>
+        <title>Trader - Ecran</title>
 
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
         <link rel="stylesheet" href="css/style.css" />
+        <link rel="shortcut icon" type="image/x-icon" href="img/logo.png" />
     </head>
 
     <body>
         <div class="container">
             <div class="row">
                 <div class="col-lg-6">
-                    <table class="table table-borderless">
+                    <table id="tableau_gauche" class="table table-borderless">
                       <tbody>
                         <tr>
                           <td id="n0"></td>
@@ -73,7 +72,7 @@ $_SESSION['val11'] = 0;
 
 
                 <div class="col-lg-6">
-                    <table class="table table-borderless">
+                    <table id="tableau_droit" class="table table-borderless">
                       <tbody>
                         <tr>
                           <td id="n6"></td>
@@ -105,26 +104,6 @@ $_SESSION['val11'] = 0;
                           <td id="p11"></td>
                           <td id="q11"></td>
                         </tr>
-                        <!--tr>
-                          <td id="n12"></td>
-                          <td id="p12"></td>
-                          <td id="q12"></td>
-                        </tr>
-                        <tr>
-                          <td id="n13"></td>
-                          <td id="p13"></td>
-                          <td id="q13"></td>
-                        </tr>
-                        <tr>
-                          <td id="n14"></td>
-                          <td id="p14"></td>
-                          <td id="q14"></td>
-                        </tr>
-                        <tr>
-                          <td id="n15"></td>
-                          <td id="p15"></td>
-                          <td id="q15"></td-->
-                        </tr>
                       </tbody>
                     </table>
                 </div>
@@ -136,19 +115,19 @@ $_SESSION['val11'] = 0;
         <h3 id="decompte"></h3>
 
         <div id="alert_info1">
-          <h1>EXPLOSION DE LA BULLE !</h1>
-          <video id="alert_video1" height="82%" autoplay>
-            <source src="video/1.mp4" type="video/mp4">
-          Your browser does not support the video tag.
-          </video>
+            <h1>EXPLOSION DE LA BULLE !</h1>
+            <video id="alert_video1" height="82%" autoplay>
+                <source src="video/1.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
         </div>
 
         <div id="alert_info2">
-          <h1>KRASH BOURSIER !</h1>
-          <video id="alert_video2" height="82%" autoplay>
-            <source src="video/2.mp4" type="video/mp4">
-          Your browser does not support the video tag.
-          </video>
+            <h1>KRASH BOURSIER !</h1>
+            <video id="alert_video2" height="82%" autoplay>
+                <source src="video/2.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
         </div>
 
         <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
@@ -156,6 +135,6 @@ $_SESSION['val11'] = 0;
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
 
         <script type="text/javascript" src="js/oXHR.js"></script>
-        <script type="text/javascript" src="js/trader.js"></script>
+        <script type="text/javascript" src="js/ecran.js"></script>
     </body>
 </html>

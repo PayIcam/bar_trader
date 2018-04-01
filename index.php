@@ -5,23 +5,24 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Trader - Accueil</title>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
         <link rel="shortcut icon" type="image/x-icon" href="img/logo.png" />
     </head>
 
     <body>
         <form>
 
-            <img src="img/logo_big.png" style="position:absolute; width: 100px; left: 10px; top: 10px;">
+            <img src="img/logo_big.png" style="position: fixed; width: 15vh; left: 10px; top: 20px;">
 
             <!-- Div qui contient le premier formulaire de choix des boissons du trader -->
+            <br>
             <div class="container">
                 <div class="card border-dark">
-                    <div class="card-header" style="text-align: center">
+                    <div class="card-header text-center">
                         <h4>Choisissez les bières à prendre en compte :</h4>
                     </div>
 
-                    <div class="card-body" style="margin: auto; font-size: auto "><br>
+                    <div class="card-body">
                         <?php
 
                         include('data/config.php');
@@ -46,7 +47,7 @@
 
                         ?>
 
-                        <br><br>
+                        <br>
                         <table class="table table-bordered table-sm" id="choix_prix">
                             <thead>
                                 <tr>
@@ -71,15 +72,15 @@
                         <h4>Paramètres généraux :</h4>
                     </div>
 
-                <div class="card-body" style="font-size: auto;"><br>
+                <div class="card-body">
                     <div class="row">
                         <div class="col-sm-1"></div>
                         <div class="col-sm-3">
-                            <label for="exampleInputEmail1">Benefice Max (centimes)</label>
+                            <label>Benefice Max (centimes)</label>
                         </div>
                         <div class="col-sm-2"></div>
                         <div class="col-sm-3">
-                            <label for="exampleInputEmail1">Benefice Min (centimes)</label>
+                            <label>Benefice Min (centimes)</label>
                         </div>
                     </div>
 
@@ -126,6 +127,7 @@
                 </div>
             </div>
         </form>
+    <br>
     </body>
 
     <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
