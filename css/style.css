@@ -79,3 +79,17 @@
 	top: 60px;
 	bottom: 0;
 }
+
+.button_image
+{
+	cursor: pointer;
+	background-color: #4CAF50;
+	padding-bottom: 8px;
+	padding-top: 8px;
+	color: white;
+}
+
+.button_image:hover
+{
+	background-color: #47994b;
+}

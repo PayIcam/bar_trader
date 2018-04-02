@@ -46,6 +46,7 @@ $_SESSION['val11'] = 0;
                     <button type="button" id="button1" onclick="changer_affichage(1);">Tableau des prix</button>
                     <button type="button" id="button2" onclick="changer_affichage(2);">Variables trader</button>
                     <button type="button" id="button3" onclick="changer_affichage(3);">Infos sur les bières</button>
+                    <button type="button" id="button4" onclick="changer_affichage(4);">Evènements</button>
 
                     <div style="position: absolute; bottom: 5px; width: 100%; text-align: center;">
                         <button id="demarrer" type="button" class="btn btn-success" onclick="demarrer();"><i class="material-icons">play_arrow</i></button>
@@ -56,8 +57,9 @@ $_SESSION['val11'] = 0;
                 </div>
 
                 <div class="contenu col-10">
-                    <div id="titre">
+                    <div id="titre" style="display: flex; justify-content: space-between;">
                         <h4 id="titre_texte" style="line-height: 60px;">Titre</h4>
+                        <h4 id="compteur_texte" style="line-height: 60px;">--</h4>
                     </div>
                     <div id="fenetre">
                         <div id="affichage0" class="affichage">
@@ -171,6 +173,24 @@ $_SESSION['val11'] = 0;
 
                         <div id="affichage3" class="affichage">
                             Affichage3
+                        </div>
+
+                        <div id="affichage4" class="affichage">
+                            <h3 id="affichage_cooldown">Cooldown : -</h3>
+                            <div class="row">
+                                <div class="col-6">
+                                    <button class="button button_image" onclick="forcer_evenement = 1;">
+                                        <h3>Déclenche l'explosion de la bulle !</h3>
+                                        <img src="img/video1.jpg" style="width: 100%; height: 50vh;">
+                                    </button>
+                                </div>
+                                <div class="col-6">
+                                    <button class="button button_image" onclick="forcer_evenement = 2;">
+                                        <h3>Déclenche un krach boursier !</h3>
+                                        <img src="img/video2.jpg" style="width: 100%; height: 50vh;">
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

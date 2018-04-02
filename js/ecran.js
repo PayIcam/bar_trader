@@ -51,19 +51,20 @@ function changement_affichage(argument)
     var i = 0;
     for(var id in boissons)
     {
-        prix = boissons[id]['prix_vente_calcule'];
+        prix = boissons[id]['prix_vente_reel'];
+        ancien_prix = document.getElementById("p" + i).innerHTML.replace('€','').replace('.','');
 
-        if(prix < boissons[id]['prix_vente_reel'])
+        if(prix < ancien_prix)
         {
             // Si le prix a baissé
             document.getElementById("n" + i).innerHTML = "<i class='up'>⯆</i> " + boissons[id]['nom'];
-            document.getElementById("q" + i).innerHTML = "-" + ((boissons[id]['prix_vente_reel'] - prix)/100).toFixed(2) + "€";
+            document.getElementById("q" + i).innerHTML = "-" + ((ancien_prix - prix)/100).toFixed(2) + "€";
         }
-        else if(prix > boissons[id]['prix_vente_reel'])
+        else if(prix > ancien_prix)
         {
             // Si le prix a augmenté
             document.getElementById("n" + i).innerHTML = "<i class='down'>⯅</i> " + boissons[id]['nom'];
-            document.getElementById("q" + i).innerHTML = "+" + ((prix -  boissons[id]['prix_vente_reel'])/100).toFixed(2) + "€";
+            document.getElementById("q" + i).innerHTML = "+" + ((prix -  ancien_prix)/100).toFixed(2) + "€";
         }
         else
         {

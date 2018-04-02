@@ -18,6 +18,7 @@ var boissons = {43 : {nom : "Saint Feuillien Grand Cru", prix_vente_calcule : 20
 //var boissons = JSON.parse(localStorage.getItem('boissons'));
 
 var on_pause = false;
+var forcer_evenement = 0;
 
 // Définition des bénéfices de la soirée
 var benefice_max = localStorage.getItem('benefice_max');
@@ -233,7 +234,10 @@ function set_variable_valeur(numero, valeur) {
 }
 
 
+function explosion_bulle()
+{
 
+}
 
 
 
@@ -267,7 +271,11 @@ function update_affichage_tableau(){
         var ligne = head.insertRow(-1);
         for(var e in boissons[id]){
             var cellule = ligne.insertCell(-1);
-            cellule.outerHTML = "<th>" + boissons[id][e] + "</th>";
+            if(e == 'prix_vente_calcule'){
+                cellule.outerHTML = '<th><button type="button" class="btn btn-primary btn-sm" onclick="modifier_prix(' + id + ');"><i class="material-icons" style="font-size: 15px">mode_edit</i></button> ' + boissons[id][e] + '</th>';
+            }else{
+                cellule.outerHTML = "<th>" + boissons[id][e] + "</th>";
+            }
         }
         var cellule = ligne.insertCell(-1);
         var benef = boissons[id]['recette'] - boissons[id]['prix_revient'] * boissons[id]['nb_ventes'];
@@ -291,6 +299,13 @@ function update_affichage_tableau(){
     cellule.outerHTML = "<th>" + total_benefice + "</th>";
 }
 
+function modifier_prix(id) {
+    var prix = prompt("Entrez le nouveau prix");
+    if (prix != null && prix > 0) {
+        boissons[id]['prix_vente_calcule'] = prix;
+    }
+}
+
 
 
 
@@ -306,6 +321,7 @@ function requete_transactions()
 {
     if(on_pause == true)
     {
+        update_affichage_tableau();
         return;
     }
 
@@ -319,6 +335,7 @@ function requete_transactions()
         rafraichissement = tps_rafraichissement;
     }
 
+    document.getElementById('compteur_texte').innerHTML = rafraichissement;
     localStorage.setItem('rafraichissement', rafraichissement);
 
     var xhr = getXMLHttpRequest();
@@ -360,9 +377,11 @@ function loop(oData)
     // Calcul du bénéfice total de la soirée
     var benefice = total_recettes - recettes_min;
 
-    if(benefice < 0 && cooldown < 0){
+    if((benefice < 0 || forcer_evenement == 2) && cooldown < 0){
 
         ////////////////////////////////////////     KRACH BOURSIER    \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+        forcer_evenement = 0;
 
         for(var id in boissons)
         {
@@ -377,15 +396,17 @@ function loop(oData)
         }
 
         // Force la mise a jour
-        rafraichissement = 0;
+        rafraichissement = -2;
 
         cooldown = tps_cooldown;
         localStorage.setItem('video_en_cours', 2);
 
     }
-    else if(benefice >= benefice_max && cooldown < 0)
+    else if((benefice >= benefice_max || forcer_evenement == 1) && cooldown < 0)
     {
         ////////////////////////////////////////   EXPLOSION BULLE   \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+        forcer_evenement = 0;
 
         // On réduit tout les prix de pas_bulle
         for(var id in boissons)
@@ -399,7 +420,7 @@ function loop(oData)
         }
 
         // Force la mise a jour
-        rafraichissement = 0;
+        rafraichissement = -2;
 
         cooldown = tps_cooldown;
         localStorage.setItem('video_en_cours', 1);
@@ -440,10 +461,20 @@ function loop(oData)
     
     cooldown --;
 
+    document.getElementById('affichage_cooldown').innerHTML = 'Cooldown : ' + cooldown;
+
     // Si le délais tps_rafraichissement est écoulé, on mets à jour l'affichage et les prix sur la bdd
-    if(rafraichissement == 0 && localStorage.getItem('video_en_cours') == 0)
+
+    if(rafraichissement == tps_rafraichissement && localStorage.getItem('video_en_cours') == 0)
     {
         mise_a_jour();
+    }
+
+    // Si on a forcé la maj, on remet le compteur au début
+    if(rafraichissement == -2)
+    {
+        mise_a_jour();
+        rafraichissement = tps_rafraichissement;
     }
 
     update_affichage_tableau();
