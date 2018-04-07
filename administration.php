@@ -29,10 +29,6 @@ $_SESSION['val11'] = 0;
         <link rel="shortcut icon" type="image/x-icon" href="img/logo.png" />
 
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-        <script type="text/javascript">
-            google.charts.load('current', {packages: ['corechart']});
-            google.charts.setOnLoadCallback(drawChart);
-        </script>
     </head>
 
     <body>
@@ -42,11 +38,12 @@ $_SESSION['val11'] = 0;
                     <div class="text-center">
                         <img src="img/logo_big.png" class="logo_menu">
                     </div>
-                    <button type="button" id="button0" onclick="changer_affichage(0);">Contrôle général</button>
-                    <button type="button" id="button1" onclick="changer_affichage(1);">Tableau des prix</button>
-                    <button type="button" id="button2" onclick="changer_affichage(2);">Variables trader</button>
-                    <button type="button" id="button3" onclick="changer_affichage(3);">Infos sur les bières</button>
-                    <button type="button" id="button4" onclick="changer_affichage(4);">Evènements</button>
+                    <button type="button" id="button0" onclick="changer_affichage(0);">Graphique des prix</button>
+                    <button type="button" id="button1" onclick="changer_affichage(1);">Graphique des ventes</button>
+                    <button type="button" id="button2" onclick="changer_affichage(2);">Tableau des prix</button>
+                    <button type="button" id="button3" onclick="changer_affichage(3);">Variables trader</button>
+                    <button type="button" id="button4" onclick="changer_affichage(4);">Statistiques</button>
+                    <button type="button" id="button5" onclick="changer_affichage(5);">Evènements</button>
 
                     <div style="position: absolute; bottom: 5px; width: 100%; text-align: center;">
                         <button id="demarrer" type="button" class="btn btn-success" onclick="demarrer();"><i class="material-icons">play_arrow</i></button>
@@ -63,55 +60,18 @@ $_SESSION['val11'] = 0;
                     </div>
                     <div id="fenetre">
                         <div id="affichage0" class="affichage">
-                            Affichage0
-
-                            <div id="chart_div"></div>
-                                <script type="text/javascript" >
-                                  
-                                google.charts.load('current', {packages: ['corechart', 'line']});
-                                google.charts.setOnLoadCallback(drawLineColors);
-
-                                function drawLineColors() {
-                                    var data = new google.visualization.DataTable();
-                                    data.addColumn('number', 'X');
-                                    data.addColumn('number', 'Bière1');
-                                    data.addColumn('number', 'Bière2');
-
-                                    data.addRows([
-                                    [0, 0, 0],    
-                                    [1, 10, 5],   
-                                    [2, 23, 15],  
-                                    [3, 17, 9],   
-                                    [4, 18, 10],  
-                                    [5, 9, 5],
-                                    [6, 11, 3],   
-                                    [7, 27, 19],  
-                                    [8, 33, 25],  
-                                    [9, 40, 32],  
-                                    [10, 32, 24],
-                                    ]);
-
-                                    var options = {
-                                    hAxis: {
-                                    title: 'Temps'
-                                    },
-                                    vAxis: {
-                                    title: 'Ventes'
-                                    },
-                                    colors: ['#a52714', '#097138']
-                                    };
-
-                                    var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
-                                    chart.draw(data, options);
-                                }
-                            </script>
+                            <div id="g1" style="height: 500px; width: 100%;"></div>
                         </div>
 
                         <div id="affichage1" class="affichage">
-                            <table id="tableau" class="table table-borderless table-sm"></table>
+                            <div id="g2" style="height: 500px; width: 100%;"></div>
                         </div>
 
                         <div id="affichage2" class="affichage">
+                            <table id="tableau" class="table table-borderless table-sm"></table>
+                        </div>
+
+                        <div id="affichage3" class="affichage">
                             <form>
                                 <div class="form-group row" style="margin-bottom: 3px">
                                     <label class="col-md-4">Temps de rafraichissement (s)</label>
@@ -171,11 +131,11 @@ $_SESSION['val11'] = 0;
                             </form>
                         </div>
 
-                        <div id="affichage3" class="affichage">
+                        <div id="affichage4" class="affichage">
                             Affichage3
                         </div>
 
-                        <div id="affichage4" class="affichage">
+                        <div id="affichage5" class="affichage">
                             <h3 id="affichage_cooldown">Cooldown : -</h3>
                             <div class="row">
                                 <div class="col-6">

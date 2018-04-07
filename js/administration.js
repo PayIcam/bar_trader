@@ -17,6 +17,7 @@ var boissons = {43 : {nom : "Saint Feuillien Grand Cru", prix_vente_calcule : 20
                 
 //var boissons = JSON.parse(localStorage.getItem('boissons'));
 
+var temps_absolu = -1;
 var on_pause = false;
 var forcer_evenement = 0;
 
@@ -62,6 +63,8 @@ function changer_affichage(numero)
     document.getElementById('affichage'+numero).style.display = 'block';
     document.getElementById('button'+numero).className = 'button_nav_active';
     document.getElementById('titre_texte').innerHTML = document.getElementById('button'+numero).innerHTML;
+    g1_draw();
+    g2_draw();
 }
 
 // Cache toutes les pages
@@ -306,8 +309,107 @@ function modifier_prix(id) {
     }
 }
 
+var g1_chart = null;
+var g1_data = null;
+var g1_options = null;
+var g1_isinit = false;
+
+google.charts.load('current', {packages:['corechart']});
+google.charts.setOnLoadCallback(g1_init);
+
+function g1_init() {
+    var g1_options = {
+    vAxis: {minValue:0, maxValue:100}
+    };
+
+    g1_chart = new google.visualization.LineChart(document.getElementById('g1'));
+    g1_data = new google.visualization.DataTable();
+    g1_data.addColumn('number', 'Temps');
+    var row = [temps_absolu];
+    for(id in boissons)
+    {
+        g1_data.addColumn('number', boissons[id]['nom']);
+        row.push(boissons[id]['prix_vente_reel']);
+
+    }
+    g1_data.addRow(row);
+    g1_isinit = true;
+    g1_draw();
+}
+
+    
+function g1_draw()
+{
+    if(g1_isinit)
+    g1_chart.draw(g1_data, g1_options);
+}
+
+function g1_update()
+{
+    if(g1_isinit == false)
+    {
+        return;
+    }
+    var row = [temps_absolu];
+    for(id in boissons)
+    {
+        row.push(boissons[id]['prix_vente_reel']);
+    }
+    // g1_data.insertRows(g1_data.getNumberOfRows(), row);
+    g1_data.addRow(row);
+    g1_draw();
+}
 
 
+
+var g2_chart = null;
+var g2_data = null;
+var g2_options = null;
+var g2_isinit = false;
+
+google.charts.setOnLoadCallback(g2_init);
+
+function g2_init() {
+    var g2_options = {
+    //vAxis: {minValue:0, maxValue:100}
+    };
+
+    g2_chart = new google.visualization.LineChart(document.getElementById('g2'));
+    g2_data = new google.visualization.DataTable();
+    g2_data.addColumn('number', 'Temps');
+    var row = [temps_absolu];
+    for(id in boissons)
+    {
+        g2_data.addColumn('number', boissons[id]['nom']);
+        row.push(Number(boissons[id]['nb_ventes']));
+
+    }
+    g2_data.addRow(row);
+    g2_isinit = true;
+    g2_draw();
+}
+
+    
+function g2_draw()
+{
+    if(g2_isinit)
+    g2_chart.draw(g2_data, g2_options);
+}
+
+function g2_update()
+{
+    if(g2_isinit == false)
+    {
+        return;
+    }
+    var row = [temps_absolu];
+    for(id in boissons)
+    {
+        row.push(Number(boissons[id]['nb_ventes']));
+    }
+    g2_data.addRow(row);
+    g2_draw();
+}
 
 
 
@@ -319,6 +421,8 @@ function modifier_prix(id) {
 // Envoie la requête AJAX pour récupérer les transactions depuis le début
 function requete_transactions()
 {
+    temps_absolu ++;
+
     if(on_pause == true)
     {
         update_affichage_tableau();
@@ -508,6 +612,9 @@ function mise_a_jour()
 
     localStorage.setItem('boissons', JSON.stringify(boissons));
     localStorage.setItem('changement_affichage', 1);
+
+    g1_update();
+    g2_update();
 }
 
 // envoi des requêtes AJAX pour mettre a jour la bdd
