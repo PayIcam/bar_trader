@@ -17,8 +17,8 @@ var boissons = {43 : {nom : "Saint Feuillien Grand Cru", prix_vente_calcule : 20
 
 //var boissons = JSON.parse(localStorage.getItem('boissons'));
 
-var temps_absolu = -1;
-var on_pause = false;
+var temps_absolu = 0;
+var on_pause = true;
 var finished = false;
 var forcer_evenement = 0;
 
@@ -55,8 +55,13 @@ var total_recettes = 0;
 // recettes minimales pour faire du bénéfice
 var recettes_min = 0;
 
+var stat_evenement_krash = 0;
+var stat_evenement_bulle = 0;
+
 // Appelle la fonction requete_transactions toutes les secondes
 setInterval(requete_transactions, 1000);
+
+localStorage.setItem('ecran_on', 0);
 
 // première initialisation
 requete_transactions();
@@ -111,6 +116,13 @@ function demarrer()
 {
     if(finished)
     {
+        return;
+    }
+
+    // Si l'écran n'est pas allumé
+    if(localStorage.getItem('ecran_on') == 0)
+    {
+        alert("L'écran n'est pas allumé");
         return;
     }
     document.getElementById('pause').className = 'btn btn-outline-primary';
@@ -383,11 +395,12 @@ function update_stats()
             stat_biere_plus_vendue = boissons[id]['nom'];
         }
     }
-    document.getElementById('stat0').innerHTML = 'Recettes de la soirée : ' + stat_recette + 'c';
-    document.getElementById('stat1').innerHTML = 'Nombre de bières vendues : ' + stat_ventes;
-    document.getElementById('stat2').innerHTML = 'Bière la plus vendue : ' + stat_biere_plus_vendue + ' (' + stat_biere_plus_vendue_nb + ')';
-    document.getElementById('stat4').innerHTML = 'Moyenne de ventes : ' + Math.round(stat_ventes / (temps_absolu / 60)) + ' bières/minute';
-
+    document.getElementById('stat0').innerHTML = stat_recette + 'c';
+    document.getElementById('stat1').innerHTML = ' ' + stat_ventes;
+    document.getElementById('stat2').innerHTML = ' ' + stat_biere_plus_vendue + ' (' + stat_biere_plus_vendue_nb + ')';
+    document.getElementById('stat4').innerHTML = ' ' + Math.round(stat_ventes / (temps_absolu / 60)) + ' bières/minute';
+    document.getElementById('stat5').innerHTML = ' ' + stat_evenement_krash;
+    document.getElementById('stat6').innerHTML = ' ' + stat_evenement_bulle;
 }
 
 
@@ -397,6 +410,14 @@ function update_stats()
 ///////////////////////////////////////////////  Partie des graphiques  ////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+setInterval(update_graphiques, 10000);
+
+function update_graphiques()
+{
+    g1_update();
+    g2_update();
+    g3_update();
+}
 
 function g1_init() {
     g1_options = {
@@ -417,7 +438,7 @@ function g1_init() {
     for(id in boissons)
     {
         g1_data.addColumn('number', boissons[id]['nom']);
-        row.push(boissons[id]['prix_vente_reel']);
+        row.push(boissons[id]['prix_vente_calcule']);
 
     }
     g1_data.addRow(row);
@@ -441,7 +462,7 @@ function g1_update()
     var row = [temps_absolu];
     for(id in boissons)
     {
-        row.push(boissons[id]['prix_vente_reel']);
+        row.push(boissons[id]['prix_vente_calcule']);
     }
     g1_data.addRow(row);
     g1_draw();
@@ -533,6 +554,7 @@ function g3_init()
     g3_data.addRow([0, 0]);
 
     g3_chart = new google.visualization.LineChart(document.getElementById('g3'));
+    g3_isinit = true;
     g3_update();
 }
 
@@ -567,15 +589,17 @@ function g3_draw()
 
 function g3_update()
 {
-    var benefice = 0;
-    for(id in boissons)
+    if(g3_isinit)
     {
-        benefice += boissons[id]['recette'] - boissons[id]['nb_ventes'] * boissons[id]['prix_revient'];
-    }
-    g3_data.addRow([temps_absolu, benefice]);
+        var benefice = 0;
+        for(id in boissons)
+        {
+            benefice += boissons[id]['recette'] - boissons[id]['nb_ventes'] * boissons[id]['prix_revient'];
+        }
+        g3_data.addRow([temps_absolu, benefice]);
 
-    g3_isinit = true;
-    g3_draw();
+        g3_draw();
+    }
 }
 
 
@@ -611,7 +635,7 @@ function requete_transactions()
         rafraichissement = tps_rafraichissement;
     }
 
-    document.getElementById('compteur_texte').innerHTML = "Rafraichissement de l'écran dans "+ rafraichissement + "s";
+    document.getElementById('compteur_texte').innerHTML = rafraichissement;
     localStorage.setItem('rafraichissement', rafraichissement);
 
     var xhr = getXMLHttpRequest();
@@ -654,7 +678,7 @@ function loop(oData)
     var benefice = total_recettes - recettes_min;
 
     document.getElementById('benef_tps_reel').innerHTML = 'Bénéfice en temps réel : ' + benefice + 'c';
-    document.getElementById('stat3').innerHTML = 'Bénéfices : ' + benefice + 'c';
+    document.getElementById('stat3').innerHTML = ' ' + benefice + 'c';
 
     if((benefice < - benefice_min * pourcentage_benefices_initial + (1 + pourcentage_benefices_initial) * benefice_min / temps_absolu_total * temps_absolu || forcer_evenement == 2) && cooldown < 0){
 
@@ -680,6 +704,8 @@ function loop(oData)
         cooldown = tps_cooldown;
         localStorage.setItem('video_en_cours', 2);
 
+        stat_evenement_krash ++;
+
     }
     else if((benefice >= benefice_max * pourcentage_benefices_initial + (1 - pourcentage_benefices_initial) * benefice_max / temps_absolu_total * temps_absolu || forcer_evenement == 1) && cooldown < 0)
     {
@@ -703,6 +729,8 @@ function loop(oData)
 
         cooldown = tps_cooldown;
         localStorage.setItem('video_en_cours', 1);
+
+        stat_evenement_bulle ++;
     }
 
     //////////////////////////////////////// FONCTIONNEMENT NORMAL \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -788,10 +816,6 @@ function mise_a_jour()
 
     localStorage.setItem('boissons', JSON.stringify(boissons));
     localStorage.setItem('changement_affichage', 1);
-
-    g1_update();
-    g2_update();
-    g3_update();
 }
 
 // envoi des requêtes AJAX pour mettre a jour la bdd

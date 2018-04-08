@@ -52,7 +52,7 @@ function appui_bouton()
     else
     {
         location.href="ecran.php";
-        window.open('administration.php', 'pop', '');
+        window.open('administration.php', '_self');
     }
 }
 
@@ -121,5 +121,7 @@ function sauvegarder()
     localStorage.setItem('heure_debut', heure_debut);
     localStorage.setItem('heure_debut_pour_php', heure_debut_pour_php);
     localStorage.setItem('heure_fin', heure_fin);
+    localStorage.setItem('changement_affichage', 0);
+    localStorage.setItem('video_en_cours', 0);
     return null;
 }

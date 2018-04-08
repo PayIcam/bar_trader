@@ -34,21 +34,21 @@ $_SESSION['val11'] = 0;
     <body>
         <div class="container-fluid">
             <div class="row">
-                <div class="navigation col-2">
+                <div class="navigation col-2" style="position: relative;">
                     <div class="text-center">
                         <img src="img/logo_big.png" class="logo_menu">
                     </div>
-                    <button type="button" id="button0" onclick="changer_affichage(0);"><i class="fas fa-chart-line"></i>    Graphique des prix</button>
-                    <button type="button" id="button1" onclick="changer_affichage(1);"><i class="fas fa-chart-line"></i>    Graphique des ventes</button>
-                    <button type="button" id="button2" onclick="changer_affichage(2);"><i class="far fa-money-bill-alt"></i>   Tableau des prix</button>
-                    <button type="button" id="button3" onclick="changer_affichage(3);"><i class="fas fa-tasks"></i>  Variables trader</button>
+                    <button type="button" id="button0" onclick="changer_affichage(0);"><i class="fas fa-tasks"></i>  Variables générales</button>
+                    <button type="button" id="button1" onclick="changer_affichage(1);"><i class="fas fa-chart-line"></i>    Graphique des prix</button>
+                    <button type="button" id="button2" onclick="changer_affichage(2);"><i class="fas fa-chart-line"></i>    Graphique des ventes</button>
+                    <button type="button" id="button3" onclick="changer_affichage(3);"><i class="far fa-money-bill-alt"></i>   Tableau des prix</button>
                     <button type="button" id="button4" onclick="changer_affichage(4);"><i class="fas fa-chart-bar"></i>  Statistiques</button>
                     <button type="button" id="button5" onclick="changer_affichage(5);"><i class="far fa-calendar-check"></i>  Evènements</button>
-                    <button type="button" id="button6" onclick="changer_affichage(6);"><i class="fas fa-chart-line"></i>  Graphique des bénéfices</button>
+                    <button type="button" id="button6" onclick="changer_affichage(6);"><i class="fas fa-chart-area"></i>  Graphique des bénéfices</button>
 
                     <div style="position: absolute; bottom: 5px; width: 100%; text-align: center;">
-                        <button id="demarrer" type="button" class="btn btn-success" onclick="demarrer();" style="font-size: 1.5em;"><i class="fas fa-play"></i></button>
-                        <button id="pause" type="button" class="btn btn-outline-primary" onclick="pause();" style="font-size: 1.5em;"><i class="fas fa-pause"></i></button>
+                        <button id="demarrer" type="button" class="btn btn-outline-success" onclick="demarrer();" style="font-size: 1.5em;"><i class="fas fa-play"></i></button>
+                        <button id="pause" type="button" class="btn btn-primary" onclick="pause();" style="font-size: 1.5em;"><i class="fas fa-pause"></i></button>
                         <button id="reinitialiser" type="button" class="btn btn-outline-secondary" onclick="reinitialiser();" style="font-size: 1.5em;"><i class="fas fa-undo-alt"></i></button>
                         <button id="stop" type="button" class="btn btn-outline-danger" onclick="stop();" style="font-size: 1.5em;"><i class="fas fa-stop"></i></button>
                     </div>
@@ -57,22 +57,13 @@ $_SESSION['val11'] = 0;
                 <div class="contenu col-10">
                     <div id="titre" style="display: flex; justify-content: space-between;">
                         <h4 id="titre_texte" style="line-height: 60px;">Titre</h4>
-                        <h5 id="compteur_texte" style="line-height: 60px;">--</h5>
+                        <div style="">
+                            <h5 id="compteur_texte">--</h5>
+                            <a target="_blank" href="ecran.php"><h5 id="compteur_ecran" style="line-height: 60px; font-size: 50px;"><i class="fas fa-desktop"></i></h5></a>
+                        </div>
                     </div>
                     <div id="fenetre">
                         <div id="affichage0" class="affichage">
-                            <div id="g1" style="height: 500px; width: 100%;"></div>
-                        </div>
-
-                        <div id="affichage1" class="affichage">
-                            <div id="g2" style="height: 500px; width: 100%;"></div>
-                        </div>
-
-                        <div id="affichage2" class="affichage">
-                            <table id="tableau" class="table table-borderless table-sm"></table>
-                        </div>
-
-                        <div id="affichage3" class="affichage">
                             <form onSubmit="return false;">
                                 <div class="form-group row" style="margin-bottom: 3px">
                                     <label class="col-md-4">Temps de rafraichissement</label>
@@ -83,7 +74,7 @@ $_SESSION['val11'] = 0;
                                 </div>
 
                                 <div class="form-group row" style="margin-bottom: 3px">
-                                    <label class="col-md-4">Intervale de prix</label>
+                                    <label class="col-md-4">Variation du prix lors de l'achat</label>
                                     <div class="col-md-2" id="val_valeur1">-</div>
                                     <button type="button" id="mod_valeur1" class="col-md-1 btn btn-primary btn-sm" onclick="modifier_variable(1);" style="margin-right: 5px;"><i class="fas fa-pencil-alt"></i></button>
                                     <button type="button" id="con_valeur1" class="col-md-1 btn btn-primary btn-sm" onclick="confirmer_variable(1);" style="margin-right: 5px; display: none;"><i class="fas fa-check"></i></button>
@@ -123,7 +114,7 @@ $_SESSION['val11'] = 0;
                                 </div>
 
                                 <div class="form-group row" style="margin-bottom: 3px">
-                                    <label class="col-md-4">Temps de cooldown</label>
+                                    <label class="col-md-4">Temps de cooldown pour les événements</label>
                                     <div class="col-md-2" id="val_valeur6">-</div>
                                     <button type="button" id="mod_valeur6" class="col-md-1 btn btn-primary btn-sm" onclick="modifier_variable(6);" style="margin-right: 5px;"><i class="fas fa-pencil-alt"></i></button>
                                     <button type="button" id="con_valeur6" class="col-md-1 btn btn-primary btn-sm" onclick="confirmer_variable(6);" style="margin-right: 5px; display: none;"><i class="fas fa-check"></i></button>
@@ -132,12 +123,47 @@ $_SESSION['val11'] = 0;
                             </form>
                         </div>
 
+                        <div id="affichage1" class="affichage">
+                            <div id="g1" style="height: 500px; width: 100%;"></div>
+                        </div>
+
+                        <div id="affichage2" class="affichage">
+                            <div id="g2" style="height: 500px; width: 100%;"></div>
+                        </div>
+
+                        <div id="affichage3" class="affichage">
+                            <table id="tableau" class="table table-borderless table-sm"></table>
+                        </div>
+
                         <div id="affichage4" class="affichage">
-                            <h5 id="stat0">--</h5>
-                            <h5 id="stat1">--</h5>
-                            <h5 id="stat2">--</h5>
-                            <h5 id="stat3">--</h5>
-                            <h5 id="stat4">--</h5>
+                            <div class="row">
+                                <div class="col-md-5"><h5>Recettes de la soirée :</h5></div>
+                                <div class="col-md-5"><h5 id="stat0">--</h5></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-5"><h5>Nombre de bières vendues :</h5></div>
+                                <div class="col-md-5"><h5 id="stat1">--</h5></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-5"><h5>Bière la plus vendue :</h5></div>
+                                <div class="col-md-5"><h5 id="stat2">--</h5></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-5"><h5>Bénéfices :</h5></div>
+                                <div class="col-md-5"><h5 id="stat3">--</h5></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-5"><h5>Moyenne de ventes :</h5></div>
+                                <div class="col-md-5"><h5 id="stat4">--</h5></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-5"><h5>Nombre de krash boursier :</h5></div>
+                                <div class="col-md-5"><h5 id="stat5">--</h5></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-5"><h5>Nombre d'explosion de la bulle :</h5></div>
+                                <div class="col-md-5"><h5 id="stat6">--</h5></div>
+                            </div>
                         </div>
 
                         <div id="affichage5" class="affichage">

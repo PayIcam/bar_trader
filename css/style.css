@@ -94,3 +94,26 @@
 {
 	background-color: #47994b;
 }
+
+#compteur_texte
+{
+	line-height: 60px;
+	position: absolute;
+	top: -4px;
+	right: 14px;
+	width: 70px;
+	text-align: center;
+	color: white;
+	pointer-events: none;
+}
+
+#compteur_ecran
+{
+	cursor: pointer;
+	color: white;
+}
+
+#compteur_ecran:hover
+{
+    color: lightgrey;
+}

@@ -29,6 +29,9 @@ function mise_a_jour()
     // Mise à jour du décompte
     document.getElementById("decompte").innerHTML = localStorage.getItem('rafraichissement');
 
+    // Réponse à la consigne de départ
+    localStorage.setItem('ecran_on', 1);
+
     // Consigne de mise à jour de l'affichage
     if(localStorage.getItem('changement_affichage') == 1){
         changement_affichage();
