@@ -102,8 +102,16 @@ function sauvegarder()
     // Récupération des valeurs diverses
     var benefice_max = document.getElementById("benefice_max").value;
     var benefice_min = document.getElementById("benefice_min").value;
-    var heure_debut  = document.getElementById("date_debut").value + " " + document.getElementById("heure_debut").value + ":00";
-    var heure_fin    = document.getElementById("date_fin").value + " " + document.getElementById("heure_fin").value + ":00";
+    
+    var date = document.getElementById("date_debut").value;
+    var heure = document.getElementById("heure_debut").value;
+
+    var heure_debut = Date.UTC(date.split('-')[0], date.split('-')[1], date.split('-')[2], heure.split(':')[0], heure.split(':')[1], 0, 0);
+
+    var date = document.getElementById("date_fin").value;
+    var heure = document.getElementById("heure_fin").value;
+
+    var heure_fin   = Date.UTC(date.split('-')[0], date.split('-')[1], date.split('-')[2], heure.split(':')[0], heure.split(':')[1], 0, 0);
 
     // Sauvegarde des valeurs dans le stockage local
     localStorage.setItem('boissons', JSON.stringify(boissons));

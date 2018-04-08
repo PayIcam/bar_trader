@@ -44,6 +44,7 @@ $_SESSION['val11'] = 0;
                     <button type="button" id="button3" onclick="changer_affichage(3);">Variables trader</button>
                     <button type="button" id="button4" onclick="changer_affichage(4);">Statistiques</button>
                     <button type="button" id="button5" onclick="changer_affichage(5);">Evènements</button>
+                    <button type="button" id="button6" onclick="changer_affichage(6);">Graphique des bénéfices</button>
 
                     <div style="position: absolute; bottom: 5px; width: 100%; text-align: center;">
                         <button id="demarrer" type="button" class="btn btn-success" onclick="demarrer();"><i class="material-icons">play_arrow</i></button>
@@ -74,8 +75,8 @@ $_SESSION['val11'] = 0;
                         <div id="affichage3" class="affichage">
                             <form>
                                 <div class="form-group row" style="margin-bottom: 3px">
-                                    <label class="col-md-4">Temps de rafraichissement (s)</label>
-                                    <div class="col-md-1" id="val_valeur0">-</div>
+                                    <label class="col-md-4">Temps de rafraichissement</label>
+                                    <div class="col-md-2" id="val_valeur0">-</div>
                                     <button type="button" id="mod_valeur0" class="col-md-1 btn btn-primary btn-sm" onclick="modifier_variable(0);" style="margin-right: 5px;"><i class="material-icons" style="font-size: 15px">mode_edit</i></button>
                                     <button type="button" id="con_valeur0" class="col-md-1 btn btn-primary btn-sm" onclick="confirmer_variable(0);" style="margin-right: 5px; display: none;"><i class="material-icons" style="font-size: 15px">check</i></button>
                                     <button type="button" id="ann_valeur0" class="col-md-1 btn btn-primary btn-sm" onclick="annuler_variable(0);" style="margin-right: 5px; display: none;"><i class="material-icons" style="font-size: 15px">clear</i></button>
@@ -83,7 +84,7 @@ $_SESSION['val11'] = 0;
 
                                 <div class="form-group row" style="margin-bottom: 3px">
                                     <label class="col-md-4">Intervale de prix</label>
-                                    <div class="col-md-1" id="val_valeur1">-</div>
+                                    <div class="col-md-2" id="val_valeur1">-</div>
                                     <button type="button" id="mod_valeur1" class="col-md-1 btn btn-primary btn-sm" onclick="modifier_variable(1);" style="margin-right: 5px;"><i class="material-icons" style="font-size: 15px">mode_edit</i></button>
                                     <button type="button" id="con_valeur1" class="col-md-1 btn btn-primary btn-sm" onclick="confirmer_variable(1);" style="margin-right: 5px; display: none;"><i class="material-icons" style="font-size: 15px">check</i></button>
                                     <button type="button" id="ann_valeur1" class="col-md-1 btn btn-primary btn-sm" onclick="annuler_variable(1);" style="margin-right: 5px; display: none;"><i class="material-icons" style="font-size: 15px">clear</i></button>
@@ -91,7 +92,7 @@ $_SESSION['val11'] = 0;
 
                                 <div class="form-group row" style="margin-bottom: 3px">
                                     <label class="col-md-4">Variation du prix lors d'une Bulle</label>
-                                    <div class="col-md-1" id="val_valeur2">-</div>
+                                    <div class="col-md-2" id="val_valeur2">-</div>
                                     <button type="button" id="mod_valeur2" class="col-md-1 btn btn-primary btn-sm" onclick="modifier_variable(2);" style="margin-right: 5px;"><i class="material-icons" style="font-size: 15px">mode_edit</i></button>
                                     <button type="button" id="con_valeur2" class="col-md-1 btn btn-primary btn-sm" onclick="confirmer_variable(2);" style="margin-right: 5px; display: none;"><i class="material-icons" style="font-size: 15px">check</i></button>
                                     <button type="button" id="ann_valeur2" class="col-md-1 btn btn-primary btn-sm" onclick="annuler_variable(2);" style="margin-right: 5px; display: none;"><i class="material-icons" style="font-size: 15px">clear</i></button>
@@ -99,7 +100,7 @@ $_SESSION['val11'] = 0;
 
                                 <div class="form-group row" style="margin-bottom: 3px">
                                     <label class="col-md-4">Variation du prix lors d'un Krach</label>
-                                    <div class="col-md-1" id="val_valeur3">-</div>
+                                    <div class="col-md-2" id="val_valeur3">-</div>
                                     <button type="button" id="mod_valeur3" class="col-md-1 btn btn-primary btn-sm" onclick="modifier_variable(3);" style="margin-right: 5px;"><i class="material-icons" style="font-size: 15px">mode_edit</i></button>
                                     <button type="button" id="con_valeur3" class="col-md-1 btn btn-primary btn-sm" onclick="confirmer_variable(3);" style="margin-right: 5px; display: none;"><i class="material-icons" style="font-size: 15px">check</i></button>
                                     <button type="button" id="ann_valeur3" class="col-md-1 btn btn-primary btn-sm" onclick="annuler_variable(3);" style="margin-right: 5px; display: none;"><i class="material-icons" style="font-size: 15px">clear</i></button>
@@ -107,7 +108,7 @@ $_SESSION['val11'] = 0;
 
                                 <div class="form-group row" style="margin-bottom: 3px">
                                     <label class="col-md-4">Bénéfice maximal</label>
-                                    <div class="col-md-1" id="val_valeur4">-</div>
+                                    <div class="col-md-2" id="val_valeur4">-</div>
                                     <button type="button" id="mod_valeur4" class="col-md-1 btn btn-primary btn-sm" onclick="modifier_variable(4);" style="margin-right: 5px;"><i class="material-icons" style="font-size: 15px">mode_edit</i></button>
                                     <button type="button" id="con_valeur4" class="col-md-1 btn btn-primary btn-sm" onclick="confirmer_variable(4);" style="margin-right: 5px; display: none;"><i class="material-icons" style="font-size: 15px">check</i></button>
                                     <button type="button" id="ann_valeur4" class="col-md-1 btn btn-primary btn-sm" onclick="annuler_variable(4);" style="margin-right: 5px; display: none;"><i class="material-icons" style="font-size: 15px">clear</i></button>
@@ -115,7 +116,7 @@ $_SESSION['val11'] = 0;
 
                                 <div class="form-group row" style="margin-bottom: 3px">
                                     <label class="col-md-4">Bénéfice minimal</label>
-                                    <div class="col-md-1" id="val_valeur5">-</div>
+                                    <div class="col-md-2" id="val_valeur5">-</div>
                                     <button type="button" id="mod_valeur5" class="col-md-1 btn btn-primary btn-sm" onclick="modifier_variable(5);" style="margin-right: 5px;"><i class="material-icons" style="font-size: 15px">mode_edit</i></button>
                                     <button type="button" id="con_valeur5" class="col-md-1 btn btn-primary btn-sm" onclick="confirmer_variable(5);" style="margin-right: 5px; display: none;"><i class="material-icons" style="font-size: 15px">check</i></button>
                                     <button type="button" id="ann_valeur5" class="col-md-1 btn btn-primary btn-sm" onclick="annuler_variable(5);" style="margin-right: 5px; display: none;"><i class="material-icons" style="font-size: 15px">clear</i></button>
@@ -123,7 +124,7 @@ $_SESSION['val11'] = 0;
 
                                 <div class="form-group row" style="margin-bottom: 3px">
                                     <label class="col-md-4">Temps de cooldown</label>
-                                    <div class="col-md-1" id="val_valeur6">-</div>
+                                    <div class="col-md-2" id="val_valeur6">-</div>
                                     <button type="button" id="mod_valeur6" class="col-md-1 btn btn-primary btn-sm" onclick="modifier_variable(6);" style="margin-right: 5px;"><i class="material-icons" style="font-size: 15px">mode_edit</i></button>
                                     <button type="button" id="con_valeur6" class="col-md-1 btn btn-primary btn-sm" onclick="confirmer_variable(6);" style="margin-right: 5px; display: none;"><i class="material-icons" style="font-size: 15px">check</i></button>
                                     <button type="button" id="ann_valeur6" class="col-md-1 btn btn-primary btn-sm" onclick="annuler_variable(6);" style="margin-right: 5px; display: none;"><i class="material-icons" style="font-size: 15px">clear</i></button>
@@ -132,7 +133,11 @@ $_SESSION['val11'] = 0;
                         </div>
 
                         <div id="affichage4" class="affichage">
-                            Affichage3
+                            <h5 id="stat0">--</h5>
+                            <h5 id="stat1">--</h5>
+                            <h5 id="stat2">--</h5>
+                            <h5 id="stat3">--</h5>
+                            <h5 id="stat4">--</h5>
                         </div>
 
                         <div id="affichage5" class="affichage">
@@ -151,6 +156,11 @@ $_SESSION['val11'] = 0;
                                     </button>
                                 </div>
                             </div>
+                        </div>
+
+                        <div id="affichage6" class="affichage">
+                            <h3 id="benef_tps_reel">Bénéfice en temps réel : </h3>
+                            <div id="g3" style="height: 500px; width: 100%;"></div>
                         </div>
                     </div>
                 </div>

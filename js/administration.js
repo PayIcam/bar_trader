@@ -14,11 +14,12 @@ var boissons = {43 : {nom : "Saint Feuillien Grand Cru", prix_vente_calcule : 20
                 22 : {nom : "Queue de charrue"         , prix_vente_calcule : 200, prix_vente_reel : 200, prix_init : 200, prix_revient : 135, prix_min : 100, nb_ventes : 0, recette : 0},
                 19 : {nom : "Barbar"                   , prix_vente_calcule : 200, prix_vente_reel : 200, prix_init : 200, prix_revient : 150, prix_min : 100, nb_ventes : 0, recette : 0},
                 534 : {nom : "Malheur 10"              , prix_vente_calcule : 200, prix_vente_reel : 200, prix_init : 200, prix_revient : 170, prix_min : 100, nb_ventes : 0, recette : 0}};
-                
+
 //var boissons = JSON.parse(localStorage.getItem('boissons'));
 
 var temps_absolu = -1;
 var on_pause = false;
+var finished = false;
 var forcer_evenement = 0;
 
 // Définition des bénéfices de la soirée
@@ -27,6 +28,9 @@ var benefice_min = localStorage.getItem('benefice_min');
 
 var heure_debut = localStorage.getItem('heure_debut');
 var heure_fin   = localStorage.getItem('heure_fin');
+
+// Temps total du trader en secondes
+var temps_absolu_total = Math.floor((heure_fin - heure_debut) /1000);
 
 // Temps minimal entre 2 événements
 var tps_cooldown = 120;
@@ -39,6 +43,8 @@ var pas_krash = 20;
 var tps_rafraichissement = 10;
 var rafraichissement = tps_rafraichissement;
 var pas = 10;
+
+var pourcentage_benefices_initial = 0.1;
 
 // total des recettes de la soirée
 var total_recettes = 0;
@@ -65,6 +71,7 @@ function changer_affichage(numero)
     document.getElementById('titre_texte').innerHTML = document.getElementById('button'+numero).innerHTML;
     g1_draw();
     g2_draw();
+    g3_draw();
 }
 
 // Cache toutes les pages
@@ -88,6 +95,10 @@ function tout_cacher()
 
 function pause()
 {
+    if(finished)
+    {
+        return;
+    }
     document.getElementById('pause').className = 'btn btn-primary';
     document.getElementById('demarrer').className = 'btn btn-outline-success';
     on_pause = true;
@@ -95,6 +106,10 @@ function pause()
 
 function demarrer()
 {
+    if(finished)
+    {
+        return;
+    }
     document.getElementById('pause').className = 'btn btn-outline-primary';
     document.getElementById('demarrer').className = 'btn btn-success';
     on_pause = false;
@@ -102,6 +117,10 @@ function demarrer()
 
 function reinitialiser()
 {
+    if(finished)
+    {
+        return;
+    }
     if(!confirm("Voulez-vous vraiment réinitialiser les prix ?"))
     {
         return;
@@ -111,11 +130,16 @@ function reinitialiser()
     {
         boissons[id]['prix_vente_calcule'] = boissons[id]['prix_init'];
         boissons[id]['prix_vente_reel'] = boissons[id]['prix_init'];
+        requete_mise_a_jour(id, boissons[id]['prix_init']);
     }
 }
 
 function stop()
 {
+    if(finished)
+    {
+        return;
+    }
     if(!confirm("Voulez-vous stopper le trader ?"))
     {
         return;
@@ -129,8 +153,12 @@ function stop()
         boissons[id]['recette'] = 0;
         requete_mise_a_jour(id, boissons[id]['prix_init']);
     }
-    pause();
+    finished = true;
     update_affichage_tableau();
+
+    document.getElementById('pause').className = 'btn btn-outline-primary';
+    document.getElementById('demarrer').className = 'btn btn-outline-success';
+    document.getElementById('stop').className = 'btn btn-danger';
 }
 
 // Par défaut, affichage de la page 0
@@ -150,7 +178,7 @@ function initialiser_variable()
 {
     for(var i = 0; i <= 6; i++)
     {
-        document.getElementById("val_valeur" + i).innerHTML = get_variable_valeur(i);
+        document.getElementById("val_valeur" + i).innerHTML = get_variable_valeur(i) + get_variable_unite(i);
         document.getElementById("mod_valeur" + i).style.display = 'block';
         document.getElementById("con_valeur" + i).style.display = 'none';
         document.getElementById("ann_valeur" + i).style.display = 'none';
@@ -162,7 +190,7 @@ function modifier_variable(numero)
     initialiser_variable();
     var valeur = document.getElementById("val_valeur" + numero);
 
-    valeur.innerHTML = '<input type="number" id="inp_valeur' + numero + '" value=' + get_variable_valeur(numero) + ' style="height: auto; width: 70px">';
+    valeur.innerHTML = '<input class="inp_valeur" type="number" id="inp_valeur' + numero + '" value=' + get_variable_valeur(numero) + ' style="height: auto; width: 160px">';
     document.getElementById("mod_valeur" + numero).style.display = 'none';
     document.getElementById("con_valeur" + numero).style.display = 'block';
     document.getElementById("ann_valeur" + numero).style.display = 'block';
@@ -182,6 +210,19 @@ function confirmer_variable(numero)
 function annuler_variable(numero)
 {
     initialiser_variable();
+}
+
+function get_variable_unite(numero)
+{
+    switch(numero){
+        case 0:
+        case 6:
+            return 's';
+            break;
+        default :
+            return 'c';
+            break;
+    }
 }
 
 function get_variable_valeur(numero) {
@@ -226,9 +267,11 @@ function set_variable_valeur(numero, valeur) {
             break;
         case 4:
             benefice_max = valeur;
+            localStorage.setItem("benefice_max", valeur);
             break;
         case 5:
             benefice_min = valeur;
+            localStorage.setItem("benefice_min", valeur);
             break;
         case 6:
             tps_cooldown = valeur;
@@ -237,14 +280,12 @@ function set_variable_valeur(numero, valeur) {
 }
 
 
-function explosion_bulle()
-{
-
-}
 
 
 
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////  Partie affichage du tableau boissons  /////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function update_affichage_tableau(){
     var tableau = document.getElementById("tableau");
@@ -317,9 +358,53 @@ var g1_isinit = false;
 google.charts.load('current', {packages:['corechart']});
 google.charts.setOnLoadCallback(g1_init);
 
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////  Partie statistiques  /////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function update_stats()
+{
+    var stat_recette = 0;
+    var stat_ventes = 0;
+    var stat_biere_plus_vendue = "";
+    var stat_biere_plus_vendue_nb = 0;
+    for(id in boissons)
+    {
+        stat_recette += boissons[id]['recette'];
+        stat_ventes += Number(boissons[id]['nb_ventes']);
+        if(Number(boissons[id]['nb_ventes']) > stat_biere_plus_vendue_nb)
+        {
+            stat_biere_plus_vendue_nb = Number(boissons[id]['nb_ventes']);
+            stat_biere_plus_vendue = boissons[id]['nom'];
+        }
+    }
+    document.getElementById('stat0').innerHTML = 'Recettes de la soirée : ' + stat_recette + 'c';
+    document.getElementById('stat1').innerHTML = 'Nombre de bières vendues : ' + stat_ventes;
+    document.getElementById('stat2').innerHTML = 'Bière la plus vendue : ' + stat_biere_plus_vendue + ' (' + stat_biere_plus_vendue_nb + ')';
+    document.getElementById('stat4').innerHTML = 'Moyenne de ventes : ' + Math.round(stat_ventes / (temps_absolu / 60)) + ' bières/minute';
+
+}
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////  Partie des graphiques  ////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 function g1_init() {
-    var g1_options = {
-    vAxis: {minValue:0, maxValue:100}
+    g1_options = {
+        chartArea: {width: '70%', height: '90%'},
+        hAxis: {
+                title: "Temps (s)"
+            },
+            vAxis: {
+                title: "Prix (c)",
+                minValue: 0
+            }
     };
 
     g1_chart = new google.visualization.LineChart(document.getElementById('g1'));
@@ -370,8 +455,15 @@ var g2_isinit = false;
 google.charts.setOnLoadCallback(g2_init);
 
 function g2_init() {
-    var g2_options = {
-    //vAxis: {minValue:0, maxValue:100}
+    g2_options = {
+        chartArea: {width: '70%', height: '90%'},
+        hAxis: {
+                title: "Temps (s)"
+            },
+            vAxis: {
+                title: "Nombre de ventes",
+                minValue: 0
+            }
     };
 
     g2_chart = new google.visualization.LineChart(document.getElementById('g2'));
@@ -382,7 +474,6 @@ function g2_init() {
     {
         g2_data.addColumn('number', boissons[id]['nom']);
         row.push(Number(boissons[id]['nb_ventes']));
-
     }
     g2_data.addRow(row);
     g2_isinit = true;
@@ -412,6 +503,80 @@ function g2_update()
 }
 
 
+google.charts.setOnLoadCallback(g3_init);
+
+var g3_chart = null;
+var g3_data = null;
+var g3_options = null;
+var g3_isinit = false;
+
+function g3_init()
+{
+    g3_options = {
+        chartArea: {width: '70%', height: '90%'},
+        interpolateNulls: true,
+        hAxis: {
+                title: "Temps (s)"
+            },
+            vAxis: {
+                title: "Bénéfice (c)",
+                minValue: 0
+            }
+    };
+
+    g3_data = new google.visualization.DataTable();
+    g3_data.addColumn('number', 'Temps');
+    g3_data.addColumn('number', 'Bénéfice réel');
+    
+    g3_data.addRow([0, 0]);
+
+    g3_chart = new google.visualization.LineChart(document.getElementById('g3'));
+    g3_update();
+}
+
+function g3_draw()
+{
+    if(g3_isinit)
+    {
+        var data1 = new google.visualization.DataTable();
+        data1.addColumn('number', 'Temps');
+        data1.addColumn('number', 'Bénéfice Min');
+        
+        data1.addRows([
+          [0, - Number(benefice_min) * pourcentage_benefices_initial],
+          [temps_absolu_total, Number(benefice_min)]
+        ]);
+        
+        var data2 = new google.visualization.DataTable();
+        data2.addColumn('number', 'Temps');
+        data2.addColumn('number', 'Bénéfice Max');
+        
+        data2.addRows([
+          [0, Number(benefice_max) * pourcentage_benefices_initial],
+          [temps_absolu_total, Number(benefice_max)]
+        ]);
+
+        var joinedData = google.visualization.data.join(data1, data2, 'full', [[0, 0]], [1], [1]);
+        joinedData = google.visualization.data.join(joinedData, g3_data, 'full', [[0, 0]], [1,2], [1]);
+
+        g3_chart.draw(joinedData, g3_options);
+    }
+}
+
+function g3_update()
+{
+    var benefice = 0;
+    for(id in boissons)
+    {
+        benefice += boissons[id]['recette'] - boissons[id]['nb_ventes'] * boissons[id]['prix_revient'];
+    }
+    g3_data.addRow([temps_absolu, benefice]);
+
+    g3_isinit = true;
+    g3_draw();
+}
+
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////  Boucle Trader  ////////////////////////////////////////////////////
@@ -421,9 +586,14 @@ function g2_update()
 // Envoie la requête AJAX pour récupérer les transactions depuis le début
 function requete_transactions()
 {
+    if(finished)
+    {
+        return;
+    }
+
     temps_absolu ++;
 
-    if(on_pause == true)
+    if(on_pause)
     {
         update_affichage_tableau();
         return;
@@ -481,7 +651,10 @@ function loop(oData)
     // Calcul du bénéfice total de la soirée
     var benefice = total_recettes - recettes_min;
 
-    if((benefice < 0 || forcer_evenement == 2) && cooldown < 0){
+    document.getElementById('benef_tps_reel').innerHTML = 'Bénéfice en temps réel : ' + benefice + 'c';
+    document.getElementById('stat3').innerHTML = 'Bénéfices : ' + benefice + 'c';
+
+    if((benefice < - benefice_min * pourcentage_benefices_initial + (1 + pourcentage_benefices_initial) * benefice_min / temps_absolu_total * temps_absolu || forcer_evenement == 2) && cooldown < 0){
 
         ////////////////////////////////////////     KRACH BOURSIER    \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
@@ -506,7 +679,7 @@ function loop(oData)
         localStorage.setItem('video_en_cours', 2);
 
     }
-    else if((benefice >= benefice_max || forcer_evenement == 1) && cooldown < 0)
+    else if((benefice >= benefice_max * pourcentage_benefices_initial + (1 - pourcentage_benefices_initial) * benefice_max / temps_absolu_total * temps_absolu || forcer_evenement == 1) && cooldown < 0)
     {
         ////////////////////////////////////////   EXPLOSION BULLE   \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
@@ -582,6 +755,7 @@ function loop(oData)
     }
 
     update_affichage_tableau();
+    update_stats();
 }
 
 
@@ -615,6 +789,7 @@ function mise_a_jour()
 
     g1_update();
     g2_update();
+    g3_update();
 }
 
 // envoi des requêtes AJAX pour mettre a jour la bdd

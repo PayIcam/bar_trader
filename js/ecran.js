@@ -21,16 +21,21 @@ lecteur_video2.addEventListener('ended', function(e) {
 
 setInterval(mise_a_jour, 100);
 
+changement_affichage();
+
 
 function mise_a_jour()
 {
+    // Mise à jour du décompte
     document.getElementById("decompte").innerHTML = localStorage.getItem('rafraichissement');
 
+    // Consigne de mise à jour de l'affichage
     if(localStorage.getItem('changement_affichage') == 1){
         changement_affichage();
         localStorage.setItem('changement_affichage', 0);
     }
 
+    // consignes de lecture de videos
     if(localStorage.getItem('video_en_cours') == 1)
     {
         lecteur_video1.play();
