@@ -27,7 +27,10 @@ var benefice_max = localStorage.getItem('benefice_max');
 var benefice_min = localStorage.getItem('benefice_min');
 
 var heure_debut = localStorage.getItem('heure_debut');
+var heure_debut_pour_php = localStorage.getItem('heure_debut_pour_php');
 var heure_fin   = localStorage.getItem('heure_fin');
+
+var fondation = localStorage.getItem('fondation');
 
 // Temps total du trader en secondes
 var temps_absolu_total = Math.floor((heure_fin - heure_debut) /1000);
@@ -397,7 +400,7 @@ function update_stats()
 
 function g1_init() {
     g1_options = {
-        chartArea: {width: '70%', height: '90%'},
+        chartArea: {width: '70%', height: '85%'},
         hAxis: {
                 title: "Temps (s)"
             },
@@ -440,7 +443,6 @@ function g1_update()
     {
         row.push(boissons[id]['prix_vente_reel']);
     }
-    // g1_data.insertRows(g1_data.getNumberOfRows(), row);
     g1_data.addRow(row);
     g1_draw();
 }
@@ -456,7 +458,7 @@ google.charts.setOnLoadCallback(g2_init);
 
 function g2_init() {
     g2_options = {
-        chartArea: {width: '70%', height: '90%'},
+        chartArea: {width: '70%', height: '85%'},
         hAxis: {
                 title: "Temps (s)"
             },
@@ -513,7 +515,7 @@ var g3_isinit = false;
 function g3_init()
 {
     g3_options = {
-        chartArea: {width: '70%', height: '90%'},
+        chartArea: {width: '70%', height: '85%'},
         interpolateNulls: true,
         hAxis: {
                 title: "Temps (s)"
@@ -609,7 +611,7 @@ function requete_transactions()
         rafraichissement = tps_rafraichissement;
     }
 
-    document.getElementById('compteur_texte').innerHTML = rafraichissement;
+    document.getElementById('compteur_texte').innerHTML = "Rafraichissement de l'écran dans "+ rafraichissement + "s";
     localStorage.setItem('rafraichissement', rafraichissement);
 
     var xhr = getXMLHttpRequest();
@@ -622,7 +624,7 @@ function requete_transactions()
         }
     };
 
-    xhr.open("GET", "data_test.php");
+    xhr.open("GET", "data_test.php?heure=" + heure_debut_pour_php + "&fondation=" + fondation);
     xhr.send(null);
 }
 
@@ -809,3 +811,13 @@ function isset ( strVariableName )
     }
     return false;
 }
+
+// Confirmation pour quitter la page pendant le fonctionnement du trader
+window.addEventListener("beforeunload", function (e)
+{
+    if(!finished){
+        var confirmationMessage = "Recharger cette page peux corrompre le trader. Etes vous sur ?";
+        e.returnValue = confirmationMessage;     // Gecko, Trident, Chrome 34+
+        return confirmationMessage;              // Gecko, WebKit, Chrome <34
+    }
+});

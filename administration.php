@@ -57,7 +57,7 @@ $_SESSION['val11'] = 0;
                 <div class="contenu col-10">
                     <div id="titre" style="display: flex; justify-content: space-between;">
                         <h4 id="titre_texte" style="line-height: 60px;">Titre</h4>
-                        <h4 id="compteur_texte" style="line-height: 60px;">--</h4>
+                        <h5 id="compteur_texte" style="line-height: 60px;">--</h5>
                     </div>
                     <div id="fenetre">
                         <div id="affichage0" class="affichage">
@@ -73,7 +73,7 @@ $_SESSION['val11'] = 0;
                         </div>
 
                         <div id="affichage3" class="affichage">
-                            <form>
+                            <form onSubmit="return false;">
                                 <div class="form-group row" style="margin-bottom: 3px">
                                     <label class="col-md-4">Temps de rafraichissement</label>
                                     <div class="col-md-2" id="val_valeur0">-</div>

@@ -107,17 +107,19 @@ function sauvegarder()
     var heure = document.getElementById("heure_debut").value;
 
     var heure_debut = Date.UTC(date.split('-')[0], date.split('-')[1], date.split('-')[2], heure.split(':')[0], heure.split(':')[1], 0, 0);
-
+    var heure_debut_pour_php = date + ' ' + heure + ':00';
+    
     var date = document.getElementById("date_fin").value;
     var heure = document.getElementById("heure_fin").value;
 
-    var heure_fin   = Date.UTC(date.split('-')[0], date.split('-')[1], date.split('-')[2], heure.split(':')[0], heure.split(':')[1], 0, 0);
+    var heure_fin = Date.UTC(date.split('-')[0], date.split('-')[1], date.split('-')[2], heure.split(':')[0], heure.split(':')[1], 0, 0);
 
     // Sauvegarde des valeurs dans le stockage local
     localStorage.setItem('boissons', JSON.stringify(boissons));
     localStorage.setItem('benefice_max', benefice_max);
     localStorage.setItem('benefice_min', benefice_min);
     localStorage.setItem('heure_debut', heure_debut);
+    localStorage.setItem('heure_debut_pour_php', heure_debut_pour_php);
     localStorage.setItem('heure_fin', heure_fin);
     return null;
 }

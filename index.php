@@ -1,4 +1,9 @@
-<?php session_start(); ?>
+<?php 
+
+session_start(); 
+$fondation = 2;
+
+?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -30,7 +35,6 @@
                         // Connexion à la BDD
                         $connexion = mysqli_connect($bdd_url, $bdd_login, $bdd_password, $bdd_database);
 
-                        $fondation = 2;
                         $requete = "SELECT t_object_obj.obj_name AS nom, t_object_obj.obj_id AS id, t_price_pri.pri_credit AS prix FROM t_object_obj JOIN t_price_pri WHERE t_object_obj.obj_id = t_price_pri.obj_id AND obj_removed=0 AND t_object_obj.fun_id=" . $fondation;
                         $resultat = mysqli_query($connexion, $requete);
 
@@ -135,4 +139,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
 
     <script type="text/javascript" src="js/index.js"></script>
+    <script type="text/javascript">
+        localStorage.setItem('fondation', <?php echo $fondation ?>);
+    </script>
 </html>
