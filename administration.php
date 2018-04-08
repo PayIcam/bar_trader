@@ -24,9 +24,9 @@ $_SESSION['val11'] = 0;
         <title>Trader - Administration</title>
 
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <link rel="stylesheet" href="css/style.css" />
         <link rel="shortcut icon" type="image/x-icon" href="img/logo.png" />
+        <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
 
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     </head>
@@ -38,19 +38,19 @@ $_SESSION['val11'] = 0;
                     <div class="text-center">
                         <img src="img/logo_big.png" class="logo_menu">
                     </div>
-                    <button type="button" id="button0" onclick="changer_affichage(0);">Graphique des prix</button>
-                    <button type="button" id="button1" onclick="changer_affichage(1);">Graphique des ventes</button>
-                    <button type="button" id="button2" onclick="changer_affichage(2);">Tableau des prix</button>
-                    <button type="button" id="button3" onclick="changer_affichage(3);">Variables trader</button>
-                    <button type="button" id="button4" onclick="changer_affichage(4);">Statistiques</button>
-                    <button type="button" id="button5" onclick="changer_affichage(5);">Evènements</button>
-                    <button type="button" id="button6" onclick="changer_affichage(6);">Graphique des bénéfices</button>
+                    <button type="button" id="button0" onclick="changer_affichage(0);"><i class="fas fa-chart-line"></i>    Graphique des prix</button>
+                    <button type="button" id="button1" onclick="changer_affichage(1);"><i class="fas fa-chart-line"></i>    Graphique des ventes</button>
+                    <button type="button" id="button2" onclick="changer_affichage(2);"><i class="far fa-money-bill-alt"></i>   Tableau des prix</button>
+                    <button type="button" id="button3" onclick="changer_affichage(3);"><i class="fas fa-tasks"></i>  Variables trader</button>
+                    <button type="button" id="button4" onclick="changer_affichage(4);"><i class="fas fa-chart-bar"></i>  Statistiques</button>
+                    <button type="button" id="button5" onclick="changer_affichage(5);"><i class="far fa-calendar-check"></i>  Evènements</button>
+                    <button type="button" id="button6" onclick="changer_affichage(6);"><i class="fas fa-chart-line"></i>  Graphique des bénéfices</button>
 
                     <div style="position: absolute; bottom: 5px; width: 100%; text-align: center;">
-                        <button id="demarrer" type="button" class="btn btn-success" onclick="demarrer();"><i class="material-icons">play_arrow</i></button>
-                        <button id="pause" type="button" class="btn btn-outline-primary" onclick="pause();"><i class="material-icons">pause</i></button>
-                        <button id="reinitialiser" type="button" class="btn btn-outline-secondary" onclick="reinitialiser();"><i class="material-icons">replay</i></button>
-                        <button id="stop" type="button" class="btn btn-outline-danger" onclick="stop();"><i class="material-icons">stop</i></button>
+                        <button id="demarrer" type="button" class="btn btn-success" onclick="demarrer();" style="font-size: 1.5em;"><i class="fas fa-play"></i></button>
+                        <button id="pause" type="button" class="btn btn-outline-primary" onclick="pause();" style="font-size: 1.5em;"><i class="fas fa-pause"></i></button>
+                        <button id="reinitialiser" type="button" class="btn btn-outline-secondary" onclick="reinitialiser();" style="font-size: 1.5em;"><i class="fas fa-undo-alt"></i></button>
+                        <button id="stop" type="button" class="btn btn-outline-danger" onclick="stop();" style="font-size: 1.5em;"><i class="fas fa-stop"></i></button>
                     </div>
                 </div>
 
@@ -77,57 +77,57 @@ $_SESSION['val11'] = 0;
                                 <div class="form-group row" style="margin-bottom: 3px">
                                     <label class="col-md-4">Temps de rafraichissement</label>
                                     <div class="col-md-2" id="val_valeur0">-</div>
-                                    <button type="button" id="mod_valeur0" class="col-md-1 btn btn-primary btn-sm" onclick="modifier_variable(0);" style="margin-right: 5px;"><i class="material-icons" style="font-size: 15px">mode_edit</i></button>
-                                    <button type="button" id="con_valeur0" class="col-md-1 btn btn-primary btn-sm" onclick="confirmer_variable(0);" style="margin-right: 5px; display: none;"><i class="material-icons" style="font-size: 15px">check</i></button>
-                                    <button type="button" id="ann_valeur0" class="col-md-1 btn btn-primary btn-sm" onclick="annuler_variable(0);" style="margin-right: 5px; display: none;"><i class="material-icons" style="font-size: 15px">clear</i></button>
+                                    <button type="button" id="mod_valeur0" class="col-md-1 btn btn-primary btn-sm" onclick="modifier_variable(0);" style="margin-right: 5px;"><i class="fas fa-pencil-alt"></i></button>
+                                    <button type="button" id="con_valeur0" class="col-md-1 btn btn-primary btn-sm" onclick="confirmer_variable(0);" style="margin-right: 5px; display: none;"><i class="fas fa-check"></i></button>
+                                    <button type="button" id="ann_valeur0" class="col-md-1 btn btn-primary btn-sm" onclick="annuler_variable(0);" style="margin-right: 5px; display: none;"><i class="fas fa-times"></i></button>
                                 </div>
 
                                 <div class="form-group row" style="margin-bottom: 3px">
                                     <label class="col-md-4">Intervale de prix</label>
                                     <div class="col-md-2" id="val_valeur1">-</div>
-                                    <button type="button" id="mod_valeur1" class="col-md-1 btn btn-primary btn-sm" onclick="modifier_variable(1);" style="margin-right: 5px;"><i class="material-icons" style="font-size: 15px">mode_edit</i></button>
-                                    <button type="button" id="con_valeur1" class="col-md-1 btn btn-primary btn-sm" onclick="confirmer_variable(1);" style="margin-right: 5px; display: none;"><i class="material-icons" style="font-size: 15px">check</i></button>
-                                    <button type="button" id="ann_valeur1" class="col-md-1 btn btn-primary btn-sm" onclick="annuler_variable(1);" style="margin-right: 5px; display: none;"><i class="material-icons" style="font-size: 15px">clear</i></button>
+                                    <button type="button" id="mod_valeur1" class="col-md-1 btn btn-primary btn-sm" onclick="modifier_variable(1);" style="margin-right: 5px;"><i class="fas fa-pencil-alt"></i></button>
+                                    <button type="button" id="con_valeur1" class="col-md-1 btn btn-primary btn-sm" onclick="confirmer_variable(1);" style="margin-right: 5px; display: none;"><i class="fas fa-check"></i></button>
+                                    <button type="button" id="ann_valeur1" class="col-md-1 btn btn-primary btn-sm" onclick="annuler_variable(1);" style="margin-right: 5px; display: none;"><i class="fas fa-times"></i></button>
                                 </div>
 
                                 <div class="form-group row" style="margin-bottom: 3px">
                                     <label class="col-md-4">Variation du prix lors d'une Bulle</label>
                                     <div class="col-md-2" id="val_valeur2">-</div>
-                                    <button type="button" id="mod_valeur2" class="col-md-1 btn btn-primary btn-sm" onclick="modifier_variable(2);" style="margin-right: 5px;"><i class="material-icons" style="font-size: 15px">mode_edit</i></button>
-                                    <button type="button" id="con_valeur2" class="col-md-1 btn btn-primary btn-sm" onclick="confirmer_variable(2);" style="margin-right: 5px; display: none;"><i class="material-icons" style="font-size: 15px">check</i></button>
-                                    <button type="button" id="ann_valeur2" class="col-md-1 btn btn-primary btn-sm" onclick="annuler_variable(2);" style="margin-right: 5px; display: none;"><i class="material-icons" style="font-size: 15px">clear</i></button>
+                                    <button type="button" id="mod_valeur2" class="col-md-1 btn btn-primary btn-sm" onclick="modifier_variable(2);" style="margin-right: 5px;"><i class="fas fa-pencil-alt"></i></button>
+                                    <button type="button" id="con_valeur2" class="col-md-1 btn btn-primary btn-sm" onclick="confirmer_variable(2);" style="margin-right: 5px; display: none;"><i class="fas fa-check"></i></button>
+                                    <button type="button" id="ann_valeur2" class="col-md-1 btn btn-primary btn-sm" onclick="annuler_variable(2);" style="margin-right: 5px; display: none;"><i class="fas fa-times"></i></button>
                                 </div>
 
                                 <div class="form-group row" style="margin-bottom: 3px">
                                     <label class="col-md-4">Variation du prix lors d'un Krach</label>
                                     <div class="col-md-2" id="val_valeur3">-</div>
-                                    <button type="button" id="mod_valeur3" class="col-md-1 btn btn-primary btn-sm" onclick="modifier_variable(3);" style="margin-right: 5px;"><i class="material-icons" style="font-size: 15px">mode_edit</i></button>
-                                    <button type="button" id="con_valeur3" class="col-md-1 btn btn-primary btn-sm" onclick="confirmer_variable(3);" style="margin-right: 5px; display: none;"><i class="material-icons" style="font-size: 15px">check</i></button>
-                                    <button type="button" id="ann_valeur3" class="col-md-1 btn btn-primary btn-sm" onclick="annuler_variable(3);" style="margin-right: 5px; display: none;"><i class="material-icons" style="font-size: 15px">clear</i></button>
+                                    <button type="button" id="mod_valeur3" class="col-md-1 btn btn-primary btn-sm" onclick="modifier_variable(3);" style="margin-right: 5px;"><i class="fas fa-pencil-alt"></i></button>
+                                    <button type="button" id="con_valeur3" class="col-md-1 btn btn-primary btn-sm" onclick="confirmer_variable(3);" style="margin-right: 5px; display: none;"><i class="fas fa-check"></i></button>
+                                    <button type="button" id="ann_valeur3" class="col-md-1 btn btn-primary btn-sm" onclick="annuler_variable(3);" style="margin-right: 5px; display: none;"><i class="fas fa-times"></i></button>
                                 </div>
 
                                 <div class="form-group row" style="margin-bottom: 3px">
                                     <label class="col-md-4">Bénéfice maximal</label>
                                     <div class="col-md-2" id="val_valeur4">-</div>
-                                    <button type="button" id="mod_valeur4" class="col-md-1 btn btn-primary btn-sm" onclick="modifier_variable(4);" style="margin-right: 5px;"><i class="material-icons" style="font-size: 15px">mode_edit</i></button>
-                                    <button type="button" id="con_valeur4" class="col-md-1 btn btn-primary btn-sm" onclick="confirmer_variable(4);" style="margin-right: 5px; display: none;"><i class="material-icons" style="font-size: 15px">check</i></button>
-                                    <button type="button" id="ann_valeur4" class="col-md-1 btn btn-primary btn-sm" onclick="annuler_variable(4);" style="margin-right: 5px; display: none;"><i class="material-icons" style="font-size: 15px">clear</i></button>
+                                    <button type="button" id="mod_valeur4" class="col-md-1 btn btn-primary btn-sm" onclick="modifier_variable(4);" style="margin-right: 5px;"><i class="fas fa-pencil-alt"></i></button>
+                                    <button type="button" id="con_valeur4" class="col-md-1 btn btn-primary btn-sm" onclick="confirmer_variable(4);" style="margin-right: 5px; display: none;"><i class="fas fa-check"></i></button>
+                                    <button type="button" id="ann_valeur4" class="col-md-1 btn btn-primary btn-sm" onclick="annuler_variable(4);" style="margin-right: 5px; display: none;"><i class="fas fa-times"></i></button>
                                 </div>
 
                                 <div class="form-group row" style="margin-bottom: 3px">
                                     <label class="col-md-4">Bénéfice minimal</label>
                                     <div class="col-md-2" id="val_valeur5">-</div>
-                                    <button type="button" id="mod_valeur5" class="col-md-1 btn btn-primary btn-sm" onclick="modifier_variable(5);" style="margin-right: 5px;"><i class="material-icons" style="font-size: 15px">mode_edit</i></button>
-                                    <button type="button" id="con_valeur5" class="col-md-1 btn btn-primary btn-sm" onclick="confirmer_variable(5);" style="margin-right: 5px; display: none;"><i class="material-icons" style="font-size: 15px">check</i></button>
-                                    <button type="button" id="ann_valeur5" class="col-md-1 btn btn-primary btn-sm" onclick="annuler_variable(5);" style="margin-right: 5px; display: none;"><i class="material-icons" style="font-size: 15px">clear</i></button>
+                                    <button type="button" id="mod_valeur5" class="col-md-1 btn btn-primary btn-sm" onclick="modifier_variable(5);" style="margin-right: 5px;"><i class="fas fa-pencil-alt"></i></button>
+                                    <button type="button" id="con_valeur5" class="col-md-1 btn btn-primary btn-sm" onclick="confirmer_variable(5);" style="margin-right: 5px; display: none;"><i class="fas fa-check"></i></button>
+                                    <button type="button" id="ann_valeur5" class="col-md-1 btn btn-primary btn-sm" onclick="annuler_variable(5);" style="margin-right: 5px; display: none;"><i class="fas fa-times"></i></button>
                                 </div>
 
                                 <div class="form-group row" style="margin-bottom: 3px">
                                     <label class="col-md-4">Temps de cooldown</label>
                                     <div class="col-md-2" id="val_valeur6">-</div>
-                                    <button type="button" id="mod_valeur6" class="col-md-1 btn btn-primary btn-sm" onclick="modifier_variable(6);" style="margin-right: 5px;"><i class="material-icons" style="font-size: 15px">mode_edit</i></button>
-                                    <button type="button" id="con_valeur6" class="col-md-1 btn btn-primary btn-sm" onclick="confirmer_variable(6);" style="margin-right: 5px; display: none;"><i class="material-icons" style="font-size: 15px">check</i></button>
-                                    <button type="button" id="ann_valeur6" class="col-md-1 btn btn-primary btn-sm" onclick="annuler_variable(6);" style="margin-right: 5px; display: none;"><i class="material-icons" style="font-size: 15px">clear</i></button>
+                                    <button type="button" id="mod_valeur6" class="col-md-1 btn btn-primary btn-sm" onclick="modifier_variable(6);" style="margin-right: 5px;"><i class="fas fa-pencil-alt"></i></button>
+                                    <button type="button" id="con_valeur6" class="col-md-1 btn btn-primary btn-sm" onclick="confirmer_variable(6);" style="margin-right: 5px; display: none;"><i class="fas fa-check"></i></button>
+                                    <button type="button" id="ann_valeur6" class="col-md-1 btn btn-primary btn-sm" onclick="annuler_variable(6);" style="margin-right: 5px; display: none;"><i class="fas fa-times"></i></button>
                                 </div>
                             </form>
                         </div>

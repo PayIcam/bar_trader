@@ -319,7 +319,7 @@ function update_affichage_tableau(){
         for(var e in boissons[id]){
             var cellule = ligne.insertCell(-1);
             if(e == 'prix_vente_calcule'){
-                cellule.outerHTML = '<th><button type="button" class="btn btn-primary btn-sm" onclick="modifier_prix(' + id + ');"><i class="material-icons" style="font-size: 15px">mode_edit</i></button> ' + boissons[id][e] + '</th>';
+                cellule.outerHTML = '<th><button type="button" class="btn btn-primary btn-sm" onclick="modifier_prix(' + id + ');"><i class="fas fa-pencil-alt"></i></button> ' + boissons[id][e] + '</th>';
             }else{
                 cellule.outerHTML = "<th>" + boissons[id][e] + "</th>";
             }
