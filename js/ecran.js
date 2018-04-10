@@ -10,14 +10,16 @@ lecteur_video2.pause();
 
 
 // A la fin d'une animation video, on cache l'ecran d'alerte
-lecteur_video1.addEventListener('ended', function(e) {
+lecteur_video1.onended = function()
+{
     document.getElementById("alert_info1").style.display = 'none';
     localStorage.setItem('video_en_cours', 0);
-});
-lecteur_video2.addEventListener('ended', function(e) {
+};
+lecteur_video2.onended = function()
+{
     document.getElementById("alert_info2").style.display = 'none';
     localStorage.setItem('video_en_cours', 0);
-});
+};
 
 setInterval(mise_a_jour, 100);
 
