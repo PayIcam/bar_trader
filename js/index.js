@@ -64,11 +64,11 @@ function sauvegarder()
     for(var i = 1; i < tableau.rows.length; i++)
     {
         // On récupère toutes les valeurs de l'élément
-        var id           = tableau.rows[i].cells[0].innerHTML;
-        var nom          = tableau.rows[i].cells[1].innerHTML;
-        var prix_initial = tableau.rows[i].cells[2].innerHTML;
-        var prix_minimal = document.getElementById("prix_min" + id).value;
-        var prix_revient = document.getElementById("prix_revient" + id).value;
+        var id           = Number(tableau.rows[i].cells[0].innerHTML);
+        var nom          = Number(tableau.rows[i].cells[1].innerHTML);
+        var prix_initial = Number(tableau.rows[i].cells[2].innerHTML);
+        var prix_minimal = Number(document.getElementById("prix_min" + id).value);
+        var prix_revient = Number(document.getElementById("prix_revient" + id).value);
 
         // Vérification des champs vides
         if(prix_minimal == ""){return "Veillez saisir un prix minimal (" + nom + ")";}
@@ -100,19 +100,19 @@ function sauvegarder()
     //else if(document.getElementById("heure_fin").value <= document.getElementById("heure_debut").value){return "L'heure de fin doit être supérieure à celle de début";}
 
     // Récupération des valeurs diverses
-    var benefice_max = document.getElementById("benefice_max").value;
-    var benefice_min = document.getElementById("benefice_min").value;
+    var benefice_max = Number(document.getElementById("benefice_max").value);
+    var benefice_min = Number(document.getElementById("benefice_min").value);
     
     var date = document.getElementById("date_debut").value;
     var heure = document.getElementById("heure_debut").value;
 
-    var heure_debut = Date.UTC(date.split('-')[0], date.split('-')[1], date.split('-')[2], heure.split(':')[0], heure.split(':')[1], 0, 0);
+    var heure_debut = new Date(date + " " + heure + ":00");
     var heure_debut_pour_php = date + ' ' + heure + ':00';
     
     var date = document.getElementById("date_fin").value;
     var heure = document.getElementById("heure_fin").value;
 
-    var heure_fin = Date.UTC(date.split('-')[0], date.split('-')[1], date.split('-')[2], heure.split(':')[0], heure.split(':')[1], 0, 0);
+    var heure_fin = new Date(date + " " + heure + ":00");
 
     // Sauvegarde des valeurs dans le stockage local
     localStorage.setItem('boissons', JSON.stringify(boissons));

@@ -2,7 +2,7 @@
 ////////////////////////////////////////////////  Variables générales  /////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-var boissons = {43 : {nom : "Saint Feuillien Grand Cru", prix_vente_calcule : 200, prix_vente_reel : 200, prix_init : 200, prix_revient : 160, prix_min : 100, nb_ventes : 0, recette : 0},
+/*var boissons = {43 : {nom : "Saint Feuillien Grand Cru", prix_vente_calcule : 200, prix_vente_reel : 200, prix_init : 200, prix_revient : 160, prix_min : 100, nb_ventes : 0, recette : 0},
                 8  : {nom : "1/2 Bière Spéciale"       , prix_vente_calcule : 200, prix_vente_reel : 200, prix_init : 200, prix_revient : 175, prix_min : 100, nb_ventes : 0, recette : 0},
                 4  : {nom : "1/2 Stella"               , prix_vente_calcule : 100, prix_vente_reel : 100, prix_init : 100, prix_revient :  90, prix_min : 50, nb_ventes : 0, recette : 0},
                 31 : {nom : "Chouffe"                  , prix_vente_calcule : 200, prix_vente_reel : 200, prix_init : 200, prix_revient : 165, prix_min : 100, nb_ventes : 0, recette : 0},
@@ -14,8 +14,8 @@ var boissons = {43 : {nom : "Saint Feuillien Grand Cru", prix_vente_calcule : 20
                 22 : {nom : "Queue de charrue"         , prix_vente_calcule : 200, prix_vente_reel : 200, prix_init : 200, prix_revient : 135, prix_min : 100, nb_ventes : 0, recette : 0},
                 19 : {nom : "Barbar"                   , prix_vente_calcule : 200, prix_vente_reel : 200, prix_init : 200, prix_revient : 150, prix_min : 100, nb_ventes : 0, recette : 0},
                 534 : {nom : "Malheur 10"              , prix_vente_calcule : 200, prix_vente_reel : 200, prix_init : 200, prix_revient : 170, prix_min : 100, nb_ventes : 0, recette : 0}};
-
-//var boissons = JSON.parse(localStorage.getItem('boissons'));
+*/
+var boissons = JSON.parse(localStorage.getItem('boissons'));
 
 var temps_absolu = 0;
 var on_pause = true;
@@ -26,9 +26,9 @@ var forcer_evenement = 0;
 var benefice_max = localStorage.getItem('benefice_max');
 var benefice_min = localStorage.getItem('benefice_min');
 
-var heure_debut = localStorage.getItem('heure_debut');
+var heure_debut = new Date(localStorage.getItem('heure_debut'));
 var heure_debut_pour_php = localStorage.getItem('heure_debut_pour_php');
-var heure_fin   = localStorage.getItem('heure_fin');
+var heure_fin   = new Date(localStorage.getItem('heure_fin'));
 
 var fondation = localStorage.getItem('fondation');
 
@@ -438,7 +438,7 @@ function g1_init() {
     for(id in boissons)
     {
         g1_data.addColumn('number', boissons[id]['nom']);
-        row.push(boissons[id]['prix_vente_calcule']);
+        row.push(Number(boissons[id]['prix_vente_calcule']));
 
     }
     g1_data.addRow(row);
@@ -462,7 +462,7 @@ function g1_update()
     var row = [temps_absolu];
     for(id in boissons)
     {
-        row.push(boissons[id]['prix_vente_calcule']);
+        row.push(Number(boissons[id]['prix_vente_calcule']));
     }
     g1_data.addRow(row);
     g1_draw();
@@ -567,7 +567,7 @@ function g3_draw()
         data1.addColumn('number', 'Bénéfice Min');
         
         data1.addRows([
-          [0, - Number(benefice_min) * pourcentage_benefices_initial],
+          [0, - Number(benefice_max) * pourcentage_benefices_initial],
           [temps_absolu_total, Number(benefice_min)]
         ]);
         
@@ -605,6 +605,27 @@ function g3_update()
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////  Boucle Débug  ////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+setInterval(update_debug, 1000);
+
+function update_debug()
+{
+    document.getElementById('debug0').innerHTML = heure_debut;
+    document.getElementById('debug1').innerHTML = heure_fin;
+    document.getElementById('debug2').innerHTML = new Date();
+    document.getElementById('debug3').innerHTML = temps_absolu;
+    document.getElementById('debug4').innerHTML = temps_absolu_total;
+    document.getElementById('debug5').innerHTML = on_pause;
+    document.getElementById('debug6').innerHTML = finished;
+    document.getElementById('debug7').innerHTML = fondation;
+    document.getElementById('debug8').innerHTML = localStorage.getItem('video_en_cours');
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////  Boucle Trader  ////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -612,7 +633,7 @@ function g3_update()
 // Envoie la requête AJAX pour récupérer les transactions depuis le début
 function requete_transactions()
 {
-    if(finished)
+    if(finished || new Date() < heure_debut)
     {
         return;
     }
@@ -636,7 +657,7 @@ function requete_transactions()
     }
 
     document.getElementById('compteur_texte').innerHTML = rafraichissement;
-    localStorage.setItem('rafraichissement', rafraichissement);
+    localStorage.setItem('rafraichissement',  rafraichissement);
 
     var xhr = getXMLHttpRequest();
     
@@ -648,7 +669,7 @@ function requete_transactions()
         }
     };
 
-    xhr.open("GET", "data_test.php?heure=" + heure_debut_pour_php + "&fondation=" + fondation);
+    xhr.open("GET", "data.php?heure=" + heure_debut_pour_php + "&fondation=" + fondation);
     xhr.send(null);
 }
 
@@ -680,7 +701,7 @@ function loop(oData)
     document.getElementById('benef_tps_reel').innerHTML = 'Bénéfice en temps réel : ' + benefice + 'c';
     document.getElementById('stat3').innerHTML = ' ' + benefice + 'c';
 
-    if((benefice < - benefice_min * pourcentage_benefices_initial + (1 + pourcentage_benefices_initial) * benefice_min / temps_absolu_total * temps_absolu || forcer_evenement == 2) && cooldown < 0){
+    if((benefice < - benefice_max * pourcentage_benefices_initial + (1 + pourcentage_benefices_initial) * benefice_min / temps_absolu_total * temps_absolu || forcer_evenement == 2) && cooldown < 0){
 
         ////////////////////////////////////////     KRACH BOURSIER    \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
@@ -695,7 +716,7 @@ function loop(oData)
             }
 
             // On augmente les prix de pas_krash
-            boissons[id]['prix_vente_calcule'] += pas_krash;
+            boissons[id]['prix_vente_calcule'] = Number(boissons[id]['prix_vente_calcule']) + pas_krash;
         }
 
         // Force la mise a jour
@@ -716,7 +737,7 @@ function loop(oData)
         // On réduit tout les prix de pas_bulle
         for(var id in boissons)
         {
-            boissons[id]['prix_vente_calcule'] -= pas_bulle;
+            boissons[id]['prix_vente_calcule'] -= Number(pas_bulle);
 
             if(boissons[id]['prix_vente_calcule'] > boissons[id]['prix_init'])
             {
@@ -748,7 +769,7 @@ function loop(oData)
                 if(boisson == id)
                 {
                     // On augmente le prix d'un pas par nb vendu
-                    boissons[boisson]['prix_vente_calcule'] = boissons[boisson]['prix_vente_calcule'] + pas * nombre_vendu;
+                    boissons[boisson]['prix_vente_calcule'] = Number(boissons[boisson]['prix_vente_calcule']) + pas * nombre_vendu;
                 }
                 else
                 {
@@ -839,6 +860,7 @@ function isset ( strVariableName )
 // Confirmation pour quitter la page pendant le fonctionnement du trader
 window.addEventListener("beforeunload", function (e)
 {
+    stop();
     if(!finished){
         var confirmationMessage = "Recharger cette page peux corrompre le trader. Etes vous sur ?";
         e.returnValue = confirmationMessage;     // Gecko, Trident, Chrome 34+

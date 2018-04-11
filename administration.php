@@ -2,18 +2,6 @@
 
 session_start();
 
-$_SESSION['val0'] = 0;
-$_SESSION['val1'] = 0;
-$_SESSION['val2'] = 0;
-$_SESSION['val3'] = 0;
-$_SESSION['val4'] = 0;
-$_SESSION['val5'] = 0;
-$_SESSION['val6'] = 0;
-$_SESSION['val7'] = 0;
-$_SESSION['val8'] = 0;
-$_SESSION['val9'] = 0;
-$_SESSION['val10'] = 0;
-$_SESSION['val11'] = 0;
 ?>
 
 <!DOCTYPE html>
@@ -45,6 +33,7 @@ $_SESSION['val11'] = 0;
                     <button type="button" id="button4" onclick="changer_affichage(4);"><i class="fas fa-chart-bar"></i>  Statistiques</button>
                     <button type="button" id="button5" onclick="changer_affichage(5);"><i class="far fa-calendar-check"></i>  Evènements</button>
                     <button type="button" id="button6" onclick="changer_affichage(6);"><i class="fas fa-chart-area"></i>  Graphique des bénéfices</button>
+                    <button type="button" id="button7" onclick="changer_affichage(7);"><i class="fas fa-bug"></i>  Débug</button>
 
                     <div style="position: absolute; bottom: 5px; width: 100%; text-align: center;">
                         <button id="demarrer" type="button" class="btn btn-outline-success" onclick="demarrer();" style="font-size: 1.5em;"><i class="fas fa-play"></i></button>
@@ -187,6 +176,45 @@ $_SESSION['val11'] = 0;
                         <div id="affichage6" class="affichage">
                             <h3 id="benef_tps_reel">Bénéfice en temps réel : </h3>
                             <div id="g3" style="height: 500px; width: 100%;"></div>
+                        </div>
+
+                        <div id="affichage7" class="affichage">
+                            <div class="row">
+                                <div class="col-2">heure_debut =</div>
+                                <div class="col-4" id="debug0">--</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-2">heure_fin =</div>
+                                <div class="col-4" id="debug1">--</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-2">new Date() =</div>
+                                <div class="col-4" id="debug2">--</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-2">temps_absolu =</div>
+                                <div class="col-4" id="debug3">--</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-2">temps_absolu_total =</div>
+                                <div class="col-4" id="debug4">--</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-2">on_pause =</div>
+                                <div class="col-4" id="debug5">--</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-2">finished =</div>
+                                <div class="col-4" id="debug6">--</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-2">fondation =</div>
+                                <div class="col-4" id="debug7">--</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-2">video_en_cours =</div>
+                                <div class="col-4" id="debug8">--</div>
+                            </div>
                         </div>
                     </div>
                 </div>
