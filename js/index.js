@@ -65,7 +65,7 @@ function sauvegarder()
     {
         // On récupère toutes les valeurs de l'élément
         var id           = Number(tableau.rows[i].cells[0].innerHTML);
-        var nom          = Number(tableau.rows[i].cells[1].innerHTML);
+        var nom          = tableau.rows[i].cells[1].innerHTML;
         var prix_initial = Number(tableau.rows[i].cells[2].innerHTML);
         var prix_minimal = Number(document.getElementById("prix_min" + id).value);
         var prix_revient = Number(document.getElementById("prix_revient" + id).value);

@@ -16,117 +16,123 @@ $fondation = 2;
 
     <body>
         <form>
-
-            <img src="img/logo_big.png" style="position: fixed; width: 15vh; left: 10px; top: 20px;">
-
             <!-- Div qui contient le premier formulaire de choix des boissons du trader -->
             <br>
-            <div class="container">
-                <div class="card border-dark">
-                    <div class="card-header text-center">
-                        <h4>Choisissez les bières à prendre en compte :</h4>
-                    </div>
+            <div class="row">
+                <div class="col-1" style="padding-right: 0;">
+                    <img src="img/logo_big.png" style="width: 100%;">
+                </div>
+                <div class="col-10" style="padding: 0;">
+                    <div class="card border-dark">
+                        <div class="card-header text-center">
+                            <h4>Choisissez les bières à prendre en compte :</h4>
+                        </div>
 
-                    <div class="card-body">
-                        <?php
+                        <div class="card-body">
+                            <?php
 
-                        include('data/config.php');
+                            include('data/config.php');
 
-                        // Connexion à la BDD
-                        $connexion = mysqli_connect($bdd_url, $bdd_login, $bdd_password, $bdd_database);
+                            // Connexion à la BDD
+                            $connexion = mysqli_connect($bdd_url, $bdd_login, $bdd_password, $bdd_database);
 
-                        $requete = "SELECT t_object_obj.obj_name AS nom, t_object_obj.obj_id AS id, t_price_pri.pri_credit AS prix FROM t_object_obj JOIN t_price_pri WHERE t_object_obj.obj_id = t_price_pri.obj_id AND obj_removed=0 AND t_object_obj.fun_id=" . $fondation;
-                        $resultat = mysqli_query($connexion, $requete);
+                            $requete = "SELECT t_object_obj.obj_name AS nom, t_object_obj.obj_id AS id, t_price_pri.pri_credit AS prix FROM t_object_obj JOIN t_price_pri WHERE t_object_obj.obj_id = t_price_pri.obj_id AND obj_removed=0 AND t_object_obj.fun_id=" . $fondation;
+                            $resultat = mysqli_query($connexion, $requete);
 
-                        // On affiche tous les articles dispos de la fondation
-                        while ($row = $resultat->fetch_assoc()) {
-                            $nom = utf8_encode($row['nom']);
-                            $id = $row['id'];
-                            $prix = $row['prix'];
+                            // On affiche tous les articles dispos de la fondation
+                            while ($row = $resultat->fetch_assoc()) {
+                                $nom = utf8_encode($row['nom']);
+                                $id = $row['id'];
+                                $prix = $row['prix'];
 
-                            echo '
-                             <input type="checkbox" value="' . $id . '" id="check' . $id . '" prix="' . $prix . '" nom="' . $nom . '" onclick="selectionArticle(this);">
-                          <label for="check' . $id . '">' . $nom . '</label>';
-                        }
+                                echo '
+                                 <input type="checkbox" value="' . $id . '" id="check' . $id . '" prix="' . $prix . '" nom="' . $nom . '" onclick="selectionArticle(this);">
+                              <label for="check' . $id . '">' . $nom . '</label>';
+                            }
 
-                        ?>
+                            ?>
 
-                        <br>
-                        <table class="table table-bordered table-sm" id="choix_prix">
-                            <thead>
-                                <tr>
-                                    <th>Id</th>
-                                    <th>Nom</th>
-                                    <th>Prix initial</th>
-                                    <th>Prix minimal</th>
-                                    <th>Prix de revient</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
+                            <br>
+                            <table class="table table-bordered table-sm" id="choix_prix">
+                                <thead>
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Nom</th>
+                                        <th>Prix initial</th>
+                                        <th>Prix minimal</th>
+                                        <th>Prix de revient</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <br>
-            <div class="container">
-                <div class="card border-dark">
-                    <div class="card-header text-center">
-                        <h4>Paramètres généraux :</h4>
-                    </div>
+            <div class="row">
+                <div class="col-1" style="padding-right: 0;">
+                </div>
+                <div class="col-10" style="padding: 0;">
+                    <div class="card border-dark">
+                        <div class="card-header text-center">
+                            <h4>Paramètres généraux :</h4>
+                        </div>
 
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-sm-1"></div>
-                        <div class="col-sm-3">
-                            <label>Benefice Max (centimes)</label>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-1"></div>
+                            <div class="col-sm-3">
+                                <label>Benefice Max (centimes)</label>
+                            </div>
+                            <div class="col-sm-2"></div>
+                            <div class="col-sm-3">
+                                <label>Benefice Min (centimes)</label>
+                            </div>
                         </div>
-                        <div class="col-sm-2"></div>
-                        <div class="col-sm-3">
-                            <label>Benefice Min (centimes)</label>
-                        </div>
-                    </div>
 
-                    <div class="row">
-                        <div class="col-sm-1"></div>
-                        <div class="col-sm-3">
-                            <input type="number" class="form-control" id="benefice_max" placeholder="Benefice Max">
+                        <div class="row">
+                            <div class="col-sm-1"></div>
+                            <div class="col-sm-3">
+                                <input type="number" class="form-control" id="benefice_max" placeholder="Benefice Max">
+                            </div>
+                            <div class="col-sm-2"></div>
+                            <div class="col-sm-3">
+                                <input type="number" class="form-control" id="benefice_min" placeholder="Benefice Min">
+                            </div>
                         </div>
-                        <div class="col-sm-2"></div>
-                        <div class="col-sm-3">
-                            <input type="number" class="form-control" id="benefice_min" placeholder="Benefice Min">
-                        </div>
-                    </div>
 
-                    <div class="row">
-                        <div class="col-sm-1"></div>
-                        <div class="col-sm-5">
-                            <label for="exampleInputEmail1">Heure de début</label>
+                        <div class="row">
+                            <div class="col-sm-1"></div>
+                            <div class="col-sm-5">
+                                <label for="exampleInputEmail1">Heure de début</label>
+                            </div>
+                            <div class="col-sm-4">
+                                <label for="exampleInputEmail1">Heure de fin</label>
+                            </div>
                         </div>
-                        <div class="col-sm-4">
-                            <label for="exampleInputEmail1">Heure de fin</label>
+                        <div class="row">
+                            <div class="col-sm-1"></div>
+                            <div class="col-sm-2">
+                                <input type="date" class="form-control" id="date_debut">
+                            </div>
+                            <div class="col-sm-2">
+                                <input type="time" class="form-control" id="heure_debut">
+                            </div>
+                            <div class="col-sm-1"></div>
+                            <div class="col-sm-2">
+                                <input type="date" class="form-control" id="date_fin">
+                            </div>
+                            <div class="col-sm-2">
+                                <input type="time" class="form-control" id="heure_fin">
+                            </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-1"></div>
-                        <div class="col-sm-2">
-                            <input type="date" class="form-control" id="date_debut">
+                        <br>
+                        <div class="form-group text-center">
+                            <input type="button" value="Démarrer le trader" onclick="appui_bouton();">
                         </div>
-                        <div class="col-sm-2">
-                            <input type="time" class="form-control" id="heure_debut">
-                        </div>
-                        <div class="col-sm-1"></div>
-                        <div class="col-sm-2">
-                            <input type="date" class="form-control" id="date_fin">
-                        </div>
-                        <div class="col-sm-2">
-                            <input type="time" class="form-control" id="heure_fin">
-                        </div>
-                    </div>
-                    <br>
-                    <div class="form-group text-center">
-                        <input type="button" value="Démarrer le trader" onclick="appui_bouton();">
                     </div>
                 </div>
             </div>
