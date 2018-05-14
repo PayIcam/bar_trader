@@ -23,22 +23,20 @@ session_start();
 
       <h3 id="decompte"></h3>
 
-      <h3 id="date">
-      </h3>
       
-      <?php
+<!--       <?php
 date_default_timezone_set('Europe/Paris');
 // --- La setlocale() fonctionnne pour strftime mais pas pour DateTime->format()
 setlocale(LC_TIME, 'fr_FR.utf8','fra');// OK
 // strftime("jourEnLettres jour moisEnLettres annee") de la date courante
 $date = strftime("%A %d %B %Y");  $heure = strftime("%H:%M:%S");
-?>
+?> -->
 
         <div class="container" style="padding: 5px">
 
             <div class="row">
 
-                <div class="col-" style="">
+                <div class="col-">
                     <table id="tableau_gauche" class="table table-borderless">
                       <tbody>
                         <tr >
@@ -114,13 +112,14 @@ $date = strftime("%A %d %B %Y");  $heure = strftime("%H:%M:%S");
                     </table>
                 </div>
 
-                <div class="col-" style="text:center; width:120px; padding: 10px 120px 10px 10px">
-                  <div style="color: white; font-size: 18px"> <?php echo $date  ?> </div>
-                  <div style="color: white; font-size: 18px"> <?php echo $heure ?> </div>
-                </div>
+                
             </div>  
 
         </div>
+        <div  style="position: absolute; top: 350px; right : 150px;text:center; width:120px; padding: 10px 120px 10px 10px">
+                  <div id="date" style="width:240px;color: white; font-size: 25px">  </div>
+                  <div id="heure" style="margin-left:34px; color: white; font-size: 35px"></div>
+                </div>
 <script type="text/javascript">
 
 var bieres=new Array("1/2 Pinte Stella", "Pinte Stella","Pinte Bière forte","1/2 Pinte Bière forte","Saucisson","Delirium","Kriek","Hoogarden","Barbar","Kasteel Rouge","Cuvée des Trolls - Pinte","Queue de Charrue");
@@ -164,7 +163,7 @@ var couleur=new Array("red","green","#13138D","#89138D","#845309","#841909","#E1
         var g2_data = google.visualization.arrayToDataTable([
           ['', bieres[1]],
           ['',  550],
-          ['',  580],
+          ['',  500],
           ['',  660],
           ['',  350]
         ]);
@@ -188,6 +187,42 @@ var couleur=new Array("red","green","#13138D","#89138D","#845309","#841909","#E1
         var g2_chart = new google.visualization.AreaChart(document.getElementById('chart_div2'));
         g2_chart.draw(g2_data, g2_options);
       }
+
+
+////////////////////////// DATE ET HEURE ///////////////////////////////////////////////////////////////////////////
+
+function heure()
+{
+     var date = new Date();
+     var heure = date.getHours();
+     var minutes = date.getMinutes();
+     var secondes = date.getSeconds();
+     if(minutes < 10)
+          minutes = "0" + minutes;
+      if(secondes < 10)
+          secondes = "0" + secondes;
+     document.getElementById('heure').innerHTML = heure + ":" + minutes + ":" + secondes;
+}
+
+function dateFr()
+{
+     // les noms de jours / mois
+     var jours = new Array("dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi");
+     var mois = new Array("janvier", "fevrier", "mars", "avril", "mai", "juin", "juillet", "aout", "septembre", "octobre", "novembre", "decembre");
+     // on recupere la date
+     var date = new Date();
+     // on construit le message
+     var message = jours[date.getDay()] + " ";   // nom du jour
+     message += date.getDate() + " ";   // numero du jour
+     message += mois[date.getMonth()] + " ";   // mois
+     message += date.getFullYear();
+     document.getElementById('date').innerHTML = message;
+}
+
+dateFr();
+setInterval(heure, 1000);
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     </script>
 

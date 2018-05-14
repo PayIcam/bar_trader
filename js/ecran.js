@@ -67,14 +67,19 @@ function changement_affichage(argument)
         if(prix < ancien_prix)
         {
             // Si le prix a baissé
-            // document.getElementByTagName("tr").style.color="#27AA27";
+            document.getElementById("n" + i).className = 'up';
+            document.getElementById("p" + i).className = 'up';
+            document.getElementById("q" + i).className = 'up';
             document.getElementById("n" + i).innerHTML = "<i class='up'>⯆</i> " + boissons[id]['nom'];
             document.getElementById("q" + i).innerHTML = "-" + ((ancien_prix - prix)/100).toFixed(2) + "€";
         }
         else if(prix > ancien_prix)
         {
             // Si le prix a augmenté
-            // document.getElementByTagName("tr").style.color="#D13607";
+            document.getElementById("n" + i).className = 'down';
+            document.getElementById("p" + i).className = 'down';
+            document.getElementById("q" + i).className = 'down';
+
             document.getElementById("n" + i).innerHTML = "<i class='down'>⯅</i> " + boissons[id]['nom'];
             document.getElementById("q" + i).innerHTML = "+" + ((prix -  ancien_prix)/100).toFixed(2) + "€";
         }
