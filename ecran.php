@@ -116,9 +116,10 @@ $date = strftime("%A %d %B %Y");  $heure = strftime("%H:%M:%S");
             </div>  
 
         </div>
-        <div  style="position: absolute; top: 350px; right : 150px;text:center; width:120px; padding: 10px 120px 10px 10px">
+        <div  style="position: absolute; top: 320px; right : 200px;text-align: center; width:120px; padding: 10px 120px 10px 10px">
                   <div id="date" style="width:240px;color: white; font-size: 25px">  </div>
-                  <div id="heure" style="margin-left:34px; color: white; font-size: 35px"></div>
+                  <div id="heure" style="margin-left:42px; color: white; font-size: 35px">  </div>
+                  <div id="fermeture" style="padding-top: 40px;width : 240px ; margin-left:5px; color: white; font-size: 22px">  </div>
                 </div>
 <script type="text/javascript">
 
@@ -217,6 +218,18 @@ function dateFr()
      message += mois[date.getMonth()] + " ";   // mois
      message += date.getFullYear();
      document.getElementById('date').innerHTML = message;
+     var fermeture = "Fermeture du marché à"
+     if(date.getDay()==1 | date.getDay()==5){
+      fermeture += " 22h45";
+     }else if(date.getDay()==2){
+      fermeture += " 18h45";
+     }else if(date.getDay()==3){
+      fermeture += " 23h15";
+     }else if(date.getDay()==4){
+      fermeture += " 20h15";
+     }
+     document.getElementById('fermeture').innerHTML = fermeture;
+
 }
 
 dateFr();
