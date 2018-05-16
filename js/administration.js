@@ -775,9 +775,12 @@ function loop(oData)
                 {
                     // On réduit le prix des autres boissons
                     var a = (pas * nombre_vendu)/(Object.keys(boissons).length - 1);
-                    if(boissons[boisson]['prix_vente_calcule'] - a >= boissons[boisson]['prix_min']){
+                    if(boissons[boisson]['prix_vente_calcule'] - a >= boissons[boisson]['prix_min'])
+                    {
                         boissons[boisson]['prix_vente_calcule'] = boissons[boisson]['prix_vente_calcule'] - a;
-                    }else{
+                    }
+                    else
+                    {
                         boissons[boisson]['prix_vente_calcule'] = boissons[boisson]['prix_min'];
                     }
                 }
@@ -848,7 +851,7 @@ function requete_mise_a_jour(id, prix)
     xhr.send(null);
 }
 
-function isset ( strVariableName )
+function isset(strVariableName)
 { 
     if(typeof strVariableName !== 'undefined')
     {
@@ -861,7 +864,8 @@ function isset ( strVariableName )
 window.addEventListener("beforeunload", function (e)
 {
     stop();
-    if(!finished){
+    if(!finished)
+    {
         var confirmationMessage = "Recharger cette page peux corrompre le trader. Etes vous sur ?";
         e.returnValue = confirmationMessage;     // Gecko, Trident, Chrome 34+
         return confirmationMessage;              // Gecko, WebKit, Chrome <34

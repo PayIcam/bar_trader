@@ -22,7 +22,7 @@ session_start();
     <body>
         <div class="container-fluid">
             <div class="row">
-                <div class="navigation col-2" style="position: relative;">
+                <div class="navigation" style="position: relative; width: 215px;">
                     <div class="text-center">
                         <img src="img/logo_big.png" class="logo_menu">
                     </div>
@@ -43,7 +43,7 @@ session_start();
                     </div>
                 </div>
 
-                <div class="contenu col-10">
+                <div class="contenu col" style="width: 100%;">
                     <div id="titre" style="display: flex; justify-content: space-between;">
                         <h4 id="titre_texte" style="line-height: 60px;">Titre</h4>
                         <div style="">
@@ -181,15 +181,15 @@ session_start();
                         <div id="affichage7" class="affichage">
                             <div class="row">
                                 <div class="col-2">heure_debut =</div>
-                                <div class="col-4" id="debug0">--</div>
+                                <div class="col-8" id="debug0">--</div>
                             </div>
                             <div class="row">
                                 <div class="col-2">heure_fin =</div>
-                                <div class="col-4" id="debug1">--</div>
+                                <div class="col-8" id="debug1">--</div>
                             </div>
                             <div class="row">
                                 <div class="col-2">new Date() =</div>
-                                <div class="col-4" id="debug2">--</div>
+                                <div class="col-8" id="debug2">--</div>
                             </div>
                             <div class="row">
                                 <div class="col-2">temps_absolu =</div>
