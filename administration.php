@@ -43,7 +43,7 @@ session_start();
                     </div>
                 </div>
 
-                <div class="contenu col" style="width: 100%;">
+                <div class="contenu col">
                     <div id="titre" style="display: flex; justify-content: space-between;">
                         <h4 id="titre_texte" style="line-height: 60px;">Titre</h4>
                         <div style="">
@@ -108,6 +108,14 @@ session_start();
                                     <button type="button" id="mod_valeur6" class="col-md-1 btn btn-primary btn-sm" onclick="modifier_variable(6);" style="margin-right: 5px;"><i class="fas fa-pencil-alt"></i></button>
                                     <button type="button" id="con_valeur6" class="col-md-1 btn btn-primary btn-sm" onclick="confirmer_variable(6);" style="margin-right: 5px; display: none;"><i class="fas fa-check"></i></button>
                                     <button type="button" id="ann_valeur6" class="col-md-1 btn btn-primary btn-sm" onclick="annuler_variable(6);" style="margin-right: 5px; display: none;"><i class="fas fa-times"></i></button>
+                                </div>
+
+                                <div class="form-group row" style="margin-bottom: 3px">
+                                    <label class="col-md-4">Temps pour la mise à jour des graphiques</label>
+                                    <div class="col-md-2" id="val_valeur7">-</div>
+                                    <button type="button" id="mod_valeur7" class="col-md-1 btn btn-primary btn-sm" onclick="modifier_variable(7);" style="margin-right: 5px;"><i class="fas fa-pencil-alt"></i></button>
+                                    <button type="button" id="con_valeur7" class="col-md-1 btn btn-primary btn-sm" onclick="confirmer_variable(7);" style="margin-right: 5px; display: none;"><i class="fas fa-check"></i></button>
+                                    <button type="button" id="ann_valeur7" class="col-md-1 btn btn-primary btn-sm" onclick="annuler_variable(7);" style="margin-right: 5px; display: none;"><i class="fas fa-times"></i></button>
                                 </div>
                             </form>
                         </div>
@@ -214,6 +222,10 @@ session_start();
                             <div class="row">
                                 <div class="col-2">video_en_cours =</div>
                                 <div class="col-4" id="debug8">--</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-2">maj_graphiques =</div>
+                                <div class="col-4" id="debug9">--</div>
                             </div>
                         </div>
                     </div>

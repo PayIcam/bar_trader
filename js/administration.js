@@ -55,6 +55,10 @@ var total_recettes = 0;
 // recettes minimales pour faire du bénéfice
 var recettes_min = 0;
 
+// Temps de mise à jour des graphiques publics
+var tps_maj_graphiques = 20;
+var maj_graphiques = 0;
+
 var stat_evenement_krash = 0;
 var stat_evenement_bulle = 0;
 
@@ -182,7 +186,7 @@ changer_affichage(0);
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////  Partie Variables Trader  ///////////////////////////////////////////////
+////////////////////////////////////////////  Partie Variables Générales  //////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -191,7 +195,7 @@ initialiser_variable();
 
 function initialiser_variable()
 {
-    for(var i = 0; i <= 6; i++)
+    for(var i = 0; i <= 7; i++)
     {
         document.getElementById("val_valeur" + i).innerHTML = get_variable_valeur(i) + get_variable_unite(i);
         document.getElementById("mod_valeur" + i).style.display = 'block';
@@ -232,6 +236,7 @@ function get_variable_unite(numero)
     switch(numero){
         case 0:
         case 6:
+        case 7:
             return 's';
             break;
         default :
@@ -263,6 +268,9 @@ function get_variable_valeur(numero) {
         case 6:
             return tps_cooldown;
             break;
+        case 7:
+            return tps_maj_graphiques;
+            break;
     }
 }
 
@@ -290,6 +298,9 @@ function set_variable_valeur(numero, valeur) {
             break;
         case 6:
             tps_cooldown = valeur;
+            break;
+        case 7:
+            tps_maj_graphiques = valeur;
             break;
     }
 }
@@ -622,6 +633,7 @@ function update_debug()
     document.getElementById('debug6').innerHTML = finished;
     document.getElementById('debug7').innerHTML = fondation;
     document.getElementById('debug8').innerHTML = localStorage.getItem('video_en_cours');
+    document.getElementById('debug9').innerHTML = maj_graphiques;
 }
 
 
@@ -658,6 +670,14 @@ function requete_transactions()
 
     document.getElementById('compteur_texte').innerHTML = rafraichissement;
     localStorage.setItem('rafraichissement',  rafraichissement);
+
+    maj_graphiques --;
+
+    if(maj_graphiques <= 0)
+    {
+        maj_graphiques = tps_maj_graphiques;
+        localStorage.setItem('changement_graphiques', 1);
+    }
 
     var xhr = getXMLHttpRequest();
     

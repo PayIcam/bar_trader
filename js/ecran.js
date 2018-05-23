@@ -1,6 +1,9 @@
 var lecteur_video1 = document.querySelector('#alert_video1');
 var lecteur_video2 = document.querySelector('#alert_video2');
 
+var graphiques = null;
+var position_graphique = 0;
+var couleur = new Array("red","green","#13138D","#89138D","#845309","#841909","#E1C641","#4CB9AE","#7F3197","#BF1DB4","#ED7AA5");
 
 // On cache l'écran d'alerte video
 document.getElementById("alert_info1").style.display = 'none';
@@ -21,9 +24,16 @@ lecteur_video2.onended = function()
     localStorage.setItem('video_en_cours', 0);
 };
 
-setInterval(mise_a_jour, 100);
+google.charts.load('current', {'packages':['corechart']});
+google.charts.setOnLoadCallback(graph_init);
 
 changement_affichage();
+changement_affichage();
+
+// Si il y a modification des variables dans localStorage, on mets à jour
+window.addEventListener('storage', function(e) {  
+  mise_a_jour();
+});
 
 
 function mise_a_jour()
@@ -40,6 +50,12 @@ function mise_a_jour()
         localStorage.setItem('changement_affichage', 0);
     }
 
+    // Consigne de mise à jour des graphiques
+    if(localStorage.getItem('changement_graphiques') == 1){
+        changement_graphiques();
+        localStorage.setItem('changement_graphiques', 0);
+    }
+
     // consignes de lecture de videos
     if(localStorage.getItem('video_en_cours') == 1)
     {
@@ -54,13 +70,18 @@ function mise_a_jour()
     }
 }
 
-
-function changement_affichage(argument)
+// Changement des prix des articles
+function changement_affichage()
 {
     var boissons = JSON.parse(localStorage.getItem('boissons'));
     var i = 0;
     for(var id in boissons)
     {
+        // On rajoute les valeurs sur les graphiques
+        if(graphiques != null)
+        {
+            graphiques[id].push(['', boissons[id]['prix_vente_reel']]);
+        }
         prix = boissons[id]['prix_vente_reel'];
         ancien_prix = document.getElementById("p" + i).innerHTML.replace('€','').replace('.','');
 
@@ -93,38 +114,154 @@ function changement_affichage(argument)
         document.getElementById("p" + i).innerHTML = (prix/100).toFixed(2) + "€";
         i++;
     }
+
+    affichage_graphiques();
 }
 
-function drawLineColors() {
-    var data = new google.visualization.DataTable();
-    data.addColumn('number', 'X');
-    data.addColumn('number', 'Bière1');
-    data.addColumn('number', 'Bière2');
+// On alterne les graphiques
+function changement_graphiques()
+{
+    // Si les graphiques n'ont pas encore étés chargés, on ne mets rien à jour
+    if(graphiques == null)
+    {
+        return;
+    }
 
-    data.addRows([
-    [0, 0, 0],    
-    [1, 10, 5],   
-    [2, 23, 15],  
-    [3, 17, 9],   
-    [4, 18, 10],  
-    [5, 9, 5],
-    [6, 11, 3],   
-    [7, 27, 19],  
-    [8, 33, 25],  
-    [9, 40, 32],  
-    [10, 32, 24],
-    ]);
+    position_graphique = position_graphique + 2;
+    if(position_graphique >= Object.keys(graphiques).length)
+    {
+        position_graphique = position_graphique - Object.keys(graphiques).length;
+    }
 
-    var options = {
-    hAxis: {
-      title: 'Temps'
-    },
-    vAxis: {
-      title: 'Ventes'
-    },
-    colors: ['#a52714', '#097138']
-    };
-
-    var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
-    chart.draw(data, options);
+    // Puis on affiche les graphs
+    affichage_graphiques();
 }
+
+function affichage_graphiques()
+{
+    // Si les graphiques n'ont pas encore étés chargés, on n'affiche rien
+    if(graphiques == null)
+    {
+        return;
+    }
+
+    var i = 0;
+    for(var id in graphiques)
+    {
+        // Premier graphique
+        if(i == position_graphique)
+        {
+            var data = google.visualization.arrayToDataTable(graphiques[id]);
+
+            var options = {
+              title: 'Ventes',
+              hAxis: {title: '',  titleTextStyle: {color: '#333'}},
+              vAxis: {minValue: 0},
+              // backgroundColor:{"#04000C"}
+              backgroundColor: {fill: "#04000C"},
+              // chartArea : {backgroundColor:"#04000C" },
+              chartArea:{left:"0", top:"0", right:"0",top:"0", bottom:"38"},
+              colors:[graphiques[id][0][0]],
+              areaOpacity:1.0,
+              legend: {position: 'bottom',textStyle: {color: 'white', fontSize: 20}},
+              // trendlines: {opacity:0.0, lineWidth:1}
+              crosshair:{opacity:0.0}    
+            };
+
+            var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
+            chart.draw(data, options);
+        }
+
+        // 2nd graphique
+        if(i == position_graphique + 1 || (i == 0 && position_graphique == Object.keys(graphiques).length - 1))
+        {
+            var data = google.visualization.arrayToDataTable(graphiques[id]);
+
+            var options = {
+              title: 'Ventes',
+              hAxis: {title: '',  titleTextStyle: {color: '#333'}},
+              vAxis: {minValue: 0},
+              // backgroundColor:{"#04000C"}
+              backgroundColor: {fill: "#04000C"},
+              // chartArea : {backgroundColor:"#04000C" },
+              chartArea:{left:"0", top:"0", right:"0",top:"0", bottom:"38"},
+              colors:[graphiques[id][0][0]],
+              areaOpacity:1.0,
+              legend: {position: 'bottom',textStyle: {color: 'white', fontSize: 20}},
+              // trendlines: {opacity:0.0, lineWidth:1}
+              crosshair:{opacity:0.0}    
+
+            };
+
+            var chart = new google.visualization.AreaChart(document.getElementById('chart_div2'));
+            chart.draw(data, options);
+        }
+
+        i++;
+    }
+}
+
+// Première initialisation des graphs
+function graph_init()
+{
+    var boissons = JSON.parse(localStorage.getItem('boissons'));
+    graphiques = {};
+    var i = 0;
+    for(var id in boissons)
+    {
+        var graphique = [[couleur[i], boissons[id]['nom']],
+                         ['', boissons[id]['prix_vente_reel']]];
+        graphiques[id] = graphique;
+
+        i++;
+    }
+
+    affichage_graphiques();
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////  Date et heure  /////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function heure()
+{
+     var date = new Date();
+     var heure = date.getHours();
+     var minutes = date.getMinutes();
+     var secondes = date.getSeconds();
+     if(minutes < 10)
+          minutes = "0" + minutes;
+      if(secondes < 10)
+          secondes = "0" + secondes;
+     document.getElementById('heure').innerHTML = heure + ":" + minutes + ":" + secondes;
+}
+
+function dateFr()
+{
+     // les noms de jours / mois
+     var jours = new Array("dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi");
+     var mois = new Array("janvier", "fevrier", "mars", "avril", "mai", "juin", "juillet", "aout", "septembre", "octobre", "novembre", "decembre");
+     // on recupere la date
+     var date = new Date();
+     // on construit le message
+     var message = jours[date.getDay()] + " ";   // nom du jour
+     message += date.getDate() + " ";   // numero du jour
+     message += mois[date.getMonth()] + " ";   // mois
+     message += date.getFullYear();
+     document.getElementById('date').innerHTML = message;
+     var fermeture = "Fermeture du marché à"
+     if(date.getDay()==1 | date.getDay()==5){
+      fermeture += " 22h45";
+     }else if(date.getDay()==2){
+      fermeture += " 18h45";
+     }else if(date.getDay()==3){
+      fermeture += " 23h15";
+     }else if(date.getDay()==4){
+      fermeture += " 20h15";
+     }
+     document.getElementById('fermeture').innerHTML = fermeture;
+}
+
+dateFr();
+setInterval(heure, 1000);
