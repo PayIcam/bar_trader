@@ -86,7 +86,7 @@ function changement_affichage()
         // On rajoute les valeurs sur les graphiques
         if(graphiques != null)
         {
-            graphiques[id].push(['', boissons[id]['prix_vente_reel']]);
+            graphiques[id].push(['', boissons[id]['prix_vente_reel']/100.0]);
         }
         prix = boissons[id]['prix_vente_reel'];
         ancien_prix = document.getElementById("p" + i).innerHTML.replace('€','').replace('.','');
@@ -162,13 +162,13 @@ function affichage_graphiques()
             var options = {
               title: 'Ventes',
               hAxis: {title: '',  titleTextStyle: {color: '#333'}},
-              vAxis: {minValue: 0},
+              vAxis: {minValue: 0,  textStyle : { fontSize: 20, color: 'white'}, gridlines: { count: 3 }, format:'#.##€'},
               // backgroundColor:{"#04000C"}
-              backgroundColor: {fill: "#04000C"},
+              backgroundColor: {fill: "transparent"},
               // chartArea : {backgroundColor:"#04000C" },
-              chartArea:{left:"0", top:"0", right:"0",top:"0", bottom:"38"},
+              chartArea:{left:"60", top:"10", right:"0", bottom:"38"},
               colors:[graphiques[id][0][0]],
-              areaOpacity:1.0,
+              areaOpacity:0.6,
               legend: {position: 'bottom',textStyle: {color: 'white', fontSize: 20}},
               // trendlines: {opacity:0.0, lineWidth:1}
               crosshair:{opacity:0.0}    
@@ -186,13 +186,13 @@ function affichage_graphiques()
             var options = {
               title: 'Ventes',
               hAxis: {title: '',  titleTextStyle: {color: '#333'}},
-              vAxis: {minValue: 0},
+              vAxis: {minValue: 0,  textStyle : { fontSize: 20, color: 'white'}, gridlines: { count: 3 }, format:'#.##€'},
               // backgroundColor:{"#04000C"}
-              backgroundColor: {fill: "#04000C"},
+              backgroundColor: {fill: "transparent"},
               // chartArea : {backgroundColor:"#04000C" },
-              chartArea:{left:"0", top:"0", right:"0",top:"0", bottom:"38"},
+              chartArea:{left:"60", top:"10", right:"0", bottom:"38"},
               colors:[graphiques[id][0][0]],
-              areaOpacity:1.0,
+              areaOpacity:0.6,
               legend: {position: 'bottom',textStyle: {color: 'white', fontSize: 20}},
               // trendlines: {opacity:0.0, lineWidth:1}
               crosshair:{opacity:0.0}    
@@ -216,7 +216,7 @@ function graph_init()
     for(var id in boissons)
     {
         var graphique = [[couleur[i], boissons[id]['nom']],
-                         ['', boissons[id]['prix_vente_reel']]];
+                         ['', boissons[id]['prix_vente_reel']/100.0]];
         graphiques[id] = graphique;
 
         i++;

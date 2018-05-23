@@ -123,8 +123,8 @@ $date = strftime("%A %d %B %Y");  $heure = strftime("%H:%M:%S");
                   <div id="fermeture" style="padding-top: 40px;width : 240px ; margin-left:5px; color: white; font-size: 22px">  </div>
                 </div>
 
-    <div id="chart_div" style="position: absolute; top:10% ; left:9%; padding: 10px; width: 30%; height: 200px; background-color: black"></div>
-     <div id="chart_div2" style="position: absolute; top:10% ; right:9%; padding: 10px; width: 30%; height: 200px; background-color: black"></div>
+    <div id="chart_div" style="position: absolute; top:10% ; left:9%; padding: 10px; width: 30%; height: 200px; background-color: transparent;"></div>
+     <div id="chart_div2" style="position: absolute; top:10% ; right:9%; padding: 10px; width: 30%; height: 200px; background-color: transparent;"></div>
 
 
         <!-- <div id="affichage1" class="affichage">
