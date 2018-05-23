@@ -59,6 +59,8 @@ var recettes_min = 0;
 var tps_maj_graphiques = 20;
 var maj_graphiques = 0;
 
+localStorage.setItem('message_banniere', "BIENVENUE AU BAR TRADER DE L'ICAM");
+
 var stat_evenement_krash = 0;
 var stat_evenement_bulle = 0;
 
@@ -195,7 +197,7 @@ initialiser_variable();
 
 function initialiser_variable()
 {
-    for(var i = 0; i <= 7; i++)
+    for(var i = 0; i <= 8; i++)
     {
         document.getElementById("val_valeur" + i).innerHTML = get_variable_valeur(i) + get_variable_unite(i);
         document.getElementById("mod_valeur" + i).style.display = 'block';
@@ -208,8 +210,14 @@ function modifier_variable(numero)
 {
     initialiser_variable();
     var valeur = document.getElementById("val_valeur" + numero);
-
-    valeur.innerHTML = '<input class="inp_valeur" type="number" id="inp_valeur' + numero + '" value=' + get_variable_valeur(numero) + ' style="height: auto; width: 160px">';
+    
+    if(numero == 8)
+    {
+        valeur.innerHTML = '<input class="inp_valeur" id="inp_valeur' + numero + '" value="' + get_variable_valeur(numero) + '" style="height: auto; width: 450px">';
+    }else
+    {
+        valeur.innerHTML = '<input class="inp_valeur" type="number" id="inp_valeur' + numero + '" value=' + get_variable_valeur(numero) + ' style="height: auto; width: 160px">';
+    }
     document.getElementById("mod_valeur" + numero).style.display = 'none';
     document.getElementById("con_valeur" + numero).style.display = 'block';
     document.getElementById("ann_valeur" + numero).style.display = 'block';
@@ -238,6 +246,9 @@ function get_variable_unite(numero)
         case 6:
         case 7:
             return 's';
+            break;
+        case 8:
+            return '';
             break;
         default :
             return 'c';
@@ -271,6 +282,9 @@ function get_variable_valeur(numero) {
         case 7:
             return tps_maj_graphiques;
             break;
+        case 8:
+            return localStorage.getItem('message_banniere');
+            break;
     }
 }
 
@@ -301,6 +315,9 @@ function set_variable_valeur(numero, valeur) {
             break;
         case 7:
             tps_maj_graphiques = valeur;
+            break;
+        case 8:
+            localStorage.setItem('message_banniere', valeur);
             break;
     }
 }

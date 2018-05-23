@@ -117,6 +117,14 @@ session_start();
                                     <button type="button" id="con_valeur7" class="col-md-1 btn btn-primary btn-sm" onclick="confirmer_variable(7);" style="margin-right: 5px; display: none;"><i class="fas fa-check"></i></button>
                                     <button type="button" id="ann_valeur7" class="col-md-1 btn btn-primary btn-sm" onclick="annuler_variable(7);" style="margin-right: 5px; display: none;"><i class="fas fa-times"></i></button>
                                 </div>
+
+                                <div class="form-group row" style="margin-bottom: 3px">
+                                    <label class="col-md-4">Message sur la banière</label>
+                                    <div class="col-md-5" id="val_valeur8">-</div>
+                                    <button type="button" id="mod_valeur8" class="col-md-1 btn btn-primary btn-sm" onclick="modifier_variable(8);" style="margin-right: 5px;"><i class="fas fa-pencil-alt"></i></button>
+                                    <button type="button" id="con_valeur8" class="col-md-1 btn btn-primary btn-sm" onclick="confirmer_variable(8);" style="margin-right: 5px; display: none;"><i class="fas fa-check"></i></button>
+                                    <button type="button" id="ann_valeur8" class="col-md-1 btn btn-primary btn-sm" onclick="annuler_variable(8);" style="margin-right: 5px; display: none;"><i class="fas fa-times"></i></button>
+                                </div>
                             </form>
                         </div>
 

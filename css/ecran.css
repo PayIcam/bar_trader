@@ -78,7 +78,7 @@ img
   background-color: transparent;
 }
 
-h1 {
+#banniere {
   -webkit-animation: banner 10s linear infinite;
           animation: banner 10s linear infinite;
   box-sizing: border-box;

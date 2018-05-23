@@ -14,13 +14,13 @@ session_start();
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
         <link rel="stylesheet" href="css/ecran.css" />
         <link rel="shortcut icon" type="image/x-icon" href="img/logo.png" />
-        
+
          <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     </head>
 
     <body>
 
-      <h1> BIENVENUE AU BAR TRADER DE L'ICAM</h1>
+      <h1 id="banniere">BIENVENUE AU BAR TRADER DE L'ICAM</h1>
 
       <h3 id="decompte"></h3>
 

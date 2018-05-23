@@ -27,6 +27,7 @@ lecteur_video2.onended = function()
 google.charts.load('current', {'packages':['corechart']});
 google.charts.setOnLoadCallback(graph_init);
 
+// Appel 2 fois pour remettre les deltas à 0
 changement_affichage();
 changement_affichage();
 
@@ -34,7 +35,6 @@ changement_affichage();
 window.addEventListener('storage', function(e) {  
   mise_a_jour();
 });
-
 
 function mise_a_jour()
 {
@@ -67,6 +67,12 @@ function mise_a_jour()
     {
         lecteur_video2.play();
         document.getElementById("alert_info2").style.display = 'inline';
+    }
+
+    // Si le message de la bannière change
+    if(document.getElementById("banniere").innerHTML != localStorage.getItem('message_banniere'))
+    {
+        changement_banniere();
     }
 }
 
@@ -217,6 +223,19 @@ function graph_init()
     }
 
     affichage_graphiques();
+}
+
+
+function changement_banniere()
+{
+    // On change le texte
+    var banniere = document.getElementById("banniere");
+    banniere.innerHTML = localStorage.getItem('message_banniere');
+
+    // On recalcule la durée
+    var banniere_vitesse = 70; // px/s
+    var banniere_largeur = $("#banniere").width();
+    banniere.style.webkitAnimationDuration = (banniere_largeur/banniere_vitesse) + 's';
 }
 
 
