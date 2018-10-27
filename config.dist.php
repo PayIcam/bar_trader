@@ -4,8 +4,8 @@
 	global $bdd_url;
 	global $bdd_database;
 
-	$bdd_login = "root";
+	$bdd_login = "";
 	$bdd_password = "";
-	$bdd_url = "localhost";
-	$bdd_database = "payicam_dev";
+	$bdd_url = "";
+	$bdd_database = "";
 ?>

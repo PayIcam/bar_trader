@@ -210,7 +210,7 @@ function modifier_variable(numero)
 {
     initialiser_variable();
     var valeur = document.getElementById("val_valeur" + numero);
-    
+
     if(numero == 8)
     {
         valeur.innerHTML = '<input class="inp_valeur" id="inp_valeur' + numero + '" value="' + get_variable_valeur(numero) + '" style="height: auto; width: 450px">';
@@ -474,7 +474,7 @@ function g1_init() {
     g1_draw();
 }
 
-    
+
 function g1_draw()
 {
     if(g1_isinit)
@@ -531,7 +531,7 @@ function g2_init() {
     g2_draw();
 }
 
-    
+
 function g2_draw()
 {
     if(g2_isinit)
@@ -578,7 +578,7 @@ function g3_init()
     g3_data = new google.visualization.DataTable();
     g3_data.addColumn('number', 'Temps');
     g3_data.addColumn('number', 'Bénéfice réel');
-    
+
     g3_data.addRow([0, 0]);
 
     g3_chart = new google.visualization.LineChart(document.getElementById('g3'));
@@ -593,16 +593,16 @@ function g3_draw()
         var data1 = new google.visualization.DataTable();
         data1.addColumn('number', 'Temps');
         data1.addColumn('number', 'Bénéfice Min');
-        
+
         data1.addRows([
           [0, - Number(benefice_max) * pourcentage_benefices_initial],
           [temps_absolu_total, Number(benefice_min)]
         ]);
-        
+
         var data2 = new google.visualization.DataTable();
         data2.addColumn('number', 'Temps');
         data2.addColumn('number', 'Bénéfice Max');
-        
+
         data2.addRows([
           [0, Number(benefice_max) * pourcentage_benefices_initial],
           [temps_absolu_total, Number(benefice_max)]
@@ -697,7 +697,7 @@ function requete_transactions()
     }
 
     var xhr = getXMLHttpRequest();
-    
+
     xhr.onreadystatechange = function() {
         if (xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 0))
         {
@@ -706,7 +706,7 @@ function requete_transactions()
         }
     };
 
-    xhr.open("GET", "data.php?heure=" + heure_debut_pour_php + "&fondation=" + fondation);
+    xhr.open("GET", "processing/data.php?heure=" + heure_debut_pour_php + "&fondation=" + fondation);
     xhr.send(null);
 }
 
@@ -826,7 +826,7 @@ function loop(oData)
             boissons[id]['nb_ventes'] = rows[i].getAttribute('nombre_vendu');
         }
     }
-    
+
     cooldown --;
 
     document.getElementById('affichage_cooldown').innerHTML = 'Cooldown : ' + cooldown;
@@ -884,12 +884,12 @@ function requete_mise_a_jour(id, prix)
 {
     var xhr = getXMLHttpRequest();
 
-    xhr.open("GET", "update_db.php?id=" + id + "&prix=" + prix);
+    xhr.open("GET", "processing/update_db.php?id=" + id + "&prix=" + prix);
     xhr.send(null);
 }
 
 function isset(strVariableName)
-{ 
+{
     if(typeof strVariableName !== 'undefined')
     {
         return true;

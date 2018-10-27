@@ -1,6 +1,6 @@
 <?php
 
-session_start(); 
+session_start();
 
 $datetime = $_GET['heure'];
 $fondation = $_GET['fondation'];

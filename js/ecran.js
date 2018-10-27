@@ -31,8 +31,12 @@ google.charts.setOnLoadCallback(graph_init);
 changement_affichage();
 changement_affichage();
 
+mise_a_jour();
+
+console.log(localStorage);
+
 // Si il y a modification des variables dans localStorage, on mets à jour
-window.addEventListener('storage', function(e) {  
+window.addEventListener('storage', function(e) {
   mise_a_jour();
 });
 
@@ -116,7 +120,7 @@ function changement_affichage()
             document.getElementById("n" + i).innerHTML = "= " + boissons[id]['nom'];
             document.getElementById("q" + i).innerHTML = "+0.00€";
         }
-        
+
         document.getElementById("p" + i).innerHTML = (prix/100).toFixed(2) + "€";
         i++;
     }
@@ -171,7 +175,7 @@ function affichage_graphiques()
               areaOpacity:0.6,
               legend: {position: 'bottom',textStyle: {color: 'white', fontSize: 20}},
               // trendlines: {opacity:0.0, lineWidth:1}
-              crosshair:{opacity:0.0}    
+              crosshair:{opacity:0.0}
             };
 
             var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
@@ -195,7 +199,7 @@ function affichage_graphiques()
               areaOpacity:0.6,
               legend: {position: 'bottom',textStyle: {color: 'white', fontSize: 20}},
               // trendlines: {opacity:0.0, lineWidth:1}
-              crosshair:{opacity:0.0}    
+              crosshair:{opacity:0.0}
 
             };
 
