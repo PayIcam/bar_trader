@@ -1,11 +1,11 @@
 <?php
 
-session_start(); 
+session_start();
 
 $prix = $_GET['prix'];
 $id = $_GET['id'];
 
-include('data/config.php');
+include('config.php');
 
 $connexion = mysqli_connect($bdd_url, $bdd_login, $bdd_password, $bdd_database);
 

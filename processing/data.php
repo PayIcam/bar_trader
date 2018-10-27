@@ -10,7 +10,7 @@ echo "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
 
 echo "<root>";
 
-include('data/config.php');
+include('config.php');
 
 $connexion = mysqli_connect($bdd_url, $bdd_login, $bdd_password, $bdd_database);
 

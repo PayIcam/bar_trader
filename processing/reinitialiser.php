@@ -1,7 +1,7 @@
 <?php
-session_start(); 
+session_start();
 
-include('../data/config.php');
+include('../config.php');
 
 try
 {

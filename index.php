@@ -1,6 +1,6 @@
-<?php 
+<?php
 
-session_start(); 
+session_start();
 $fondation = 2;
 
 ?>
@@ -31,7 +31,7 @@ $fondation = 2;
                         <div class="card-body">
                             <?php
 
-                            include('data/config.php');
+                            include('config.php');
 
                             // Connexion à la BDD
                             $connexion = mysqli_connect($bdd_url, $bdd_login, $bdd_password, $bdd_database);
