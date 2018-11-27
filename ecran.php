@@ -1,6 +1,6 @@
 <?php
 
-session_start();
+require '_header.php';
 
 ?>
 
@@ -24,7 +24,7 @@ session_start();
 
       <h3 id="decompte"></h3>
 
-      
+
 <!--       <?php
 date_default_timezone_set('Europe/Paris');
 // --- La setlocale() fonctionnne pour strftime mais pas pour DateTime->format()
@@ -35,6 +35,7 @@ $date = strftime("%A %d %B %Y");  $heure = strftime("%H:%M:%S");
 
         <div class="container" style="padding: 5px">
 
+            <br><br><br>
             <div class="row">
 
                 <div class="col-">
@@ -70,15 +71,6 @@ $date = strftime("%A %d %B %Y");  $heure = strftime("%H:%M:%S");
                           <td id="p5"></td>
                           <td id="q5"></td>
                         </tr>
-                      </tbody>
-                    </table>
-                </div>
-
-
-
-                <div class="col-" style="">
-                    <table id="tableau_droit" class="table table-borderless">
-                      <tbody>
                         <tr>
                           <td id="n6"></td>
                           <td id="p6"></td>
@@ -89,6 +81,15 @@ $date = strftime("%A %d %B %Y");  $heure = strftime("%H:%M:%S");
                           <td id="p7"></td>
                           <td id="q7"></td>
                         </tr>
+                      </tbody>
+                    </table>
+                </div>
+
+
+
+                <div class="col-" style="">
+                    <table id="tableau_droit" class="table table-borderless">
+                      <tbody>
                         <tr>
                           <td id="n8"></td>
                           <td id="p8"></td>
@@ -109,12 +110,31 @@ $date = strftime("%A %d %B %Y");  $heure = strftime("%H:%M:%S");
                           <td id="p11"></td>
                           <td id="q11"></td>
                         </tr>
-                      </tbody>
+                        <tr>
+                          <td id="n12"></td>
+                          <td id="p12"></td>
+                          <td id="q12"></td>
+                        </tr>
+                        <tr>
+                          <td id="n13"></td>
+                          <td id="p13"></td>
+                          <td id="q13"></td>
+                        </tr>
+                        <tr>
+                          <td id="n14"></td>
+                          <td id="p14"></td>
+                          <td id="q14"></td>
+                        </tr>
+                        <tr>
+                          <td id="n15"></td>
+                          <td id="p15"></td>
+                          <td id="q15"></td>
+                        </tr>
                     </table>
                 </div>
 
-                
-            </div>  
+
+            </div>
 
         </div>
         <div  style="position: absolute; top: 320px; right : 200px;text-align: center; width:120px; padding: 10px 120px 10px 10px">

@@ -5,8 +5,10 @@ function selectionArticle(element)
     // Si on coche la checkbox
     if(element.checked)
     {
+        console.log(element);
+        console.log(element.getAttribute('name'));
         var id   = element.getAttribute('value');
-        var nom  = element.getAttribute('nom');
+        var nom  = element.getAttribute('name');
         var prix = element.getAttribute('prix');
 
         var ligne = tableau.insertRow(-1);
@@ -61,6 +63,10 @@ function sauvegarder()
     var boissons = {};
     var tableau = document.getElementById('choix_prix');
 
+    console.log(tableau.rows.length);
+
+    if(tableau.rows.length-1 <2){return "Veuillez mettre au moins 2 articles en bourse";}
+
     for(var i = 1; i < tableau.rows.length; i++)
     {
         // On récupère toutes les valeurs de l'élément
@@ -102,17 +108,29 @@ function sauvegarder()
     // Récupération des valeurs diverses
     var benefice_max = Number(document.getElementById("benefice_max").value);
     var benefice_min = Number(document.getElementById("benefice_min").value);
-    
+
     var date = document.getElementById("date_debut").value;
     var heure = document.getElementById("heure_debut").value;
 
     var heure_debut = new Date(date + " " + heure + ":00");
-    var heure_debut_pour_php = date + ' ' + heure + ':00';
-    
+    var heure_debut_pour_php = date + " " + heure + ":00";
+
     var date = document.getElementById("date_fin").value;
     var heure = document.getElementById("heure_fin").value;
 
     var heure_fin = new Date(date + " " + heure + ":00");
+
+    // var benefice_max = Number(document.getElementById("benefice_max").value);
+    // var benefice_min = Number(document.getElementById("benefice_min").value);
+
+    // var open_trader_date = document.getElementById("open_trader").value;
+
+    // var heure_debut = new Date(open_trader_date);
+    // var heure_debut_pour_php = open_trader_date;
+
+    // var close_trader_date = document.getElementById("heure_fin").value;
+
+    // var heure_fin = new Date(close_trader_date);
 
     // Sauvegarde des valeurs dans le stockage local
     localStorage.setItem('boissons', JSON.stringify(boissons));
@@ -125,3 +143,21 @@ function sauvegarder()
     localStorage.setItem('video_en_cours', 0);
     return null;
 }
+
+// $('#trader_dates input').click(function() {
+//     $(this).next('span').click();
+// });
+
+// $('#open_trader_div').datetimepicker({
+//     sideBySide: true
+// });
+// $('#close_trader_div').datetimepicker({
+//     sideBySide: true,
+//     useCurrent: false //Important! See issue #1075
+// });
+// $("#open_trader_div").on("dp.change", function (e) {
+//     $('#close_trader_div').data("DateTimePicker").minDate(e.date);
+// });
+// $("#close_trader_div").on("dp.change", function (e) {
+//     $('#open_trader_div').data("DateTimePicker").maxDate(e.date);
+// });

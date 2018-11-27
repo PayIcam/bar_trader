@@ -1,7 +1,9 @@
 <?php
 
-session_start();
+require '_header.php';
 $fondation = 2;
+$_SESSION['fun_id'] = $fondation;
+$products = $payutcClient->getProducts(array('params[service]' => 'Mozart', 'params[fun_ids]' => json_encode([$fondation])));
 
 ?>
 <!DOCTYPE html>
@@ -29,28 +31,20 @@ $fondation = 2;
                         </div>
 
                         <div class="card-body">
+                            <div class="row">
+
                             <?php
+                            $i=0;
+                            foreach($products as $product) {
+                                if($i%6==0) {
+                                    echo '</div><div class="row">';
+                                }
+                                echo '<div class="col-sm-2"><label for="check' . $product->id . '">' . $product->name . '</label>
+                                <input type="checkbox" value="' . $product->id . '" id="check' . $product->id . '" prix="' . $product->price . '" name="' . $product->name . '" onclick="selectionArticle(this);"></div>';
 
-                            include('config.php');
-
-                            // Connexion à la BDD
-                            $connexion = mysqli_connect($bdd_url, $bdd_login, $bdd_password, $bdd_database);
-
-                            $requete = "SELECT t_object_obj.obj_name AS nom, t_object_obj.obj_id AS id, t_price_pri.pri_credit AS prix FROM t_object_obj JOIN t_price_pri WHERE t_object_obj.obj_id = t_price_pri.obj_id AND obj_removed=0 AND t_object_obj.fun_id=" . $fondation;
-                            $resultat = mysqli_query($connexion, $requete);
-
-                            // On affiche tous les articles dispos de la fondation
-                            while ($row = $resultat->fetch_assoc()) {
-                                $nom = utf8_encode($row['nom']);
-                                $id = $row['id'];
-                                $prix = $row['prix'];
-
-                                echo '
-                                 <input type="checkbox" value="' . $id . '" id="check' . $id . '" prix="' . $prix . '" nom="' . $nom . '" onclick="selectionArticle(this);">
-                              <label for="check' . $id . '">' . $nom . '</label>';
-                            }
-
-                            ?>
+                                $i++;
+                            } ?>
+                            </div>
 
                             <br>
                             <table class="table table-bordered table-sm" id="choix_prix">
@@ -129,6 +123,26 @@ $fondation = 2;
                                 <input type="time" class="form-control" id="heure_fin">
                             </div>
                         </div>
+
+                        <!-- <div id="trader_dates">
+                            <div class='form-group' class="col-sm-3">
+                                <label for="open_trader">Ouverture du trader:</label>
+                                <div class='input-group date' id='open_trader_div'>
+                                    <input type='text' class="form-control" name="open_trader" id="open_trader" required>
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                </div>
+                            </div>
+                            <div class='form-group' class="col-sm-3">
+                                <label for="close_trader">Fin du trader:</label>
+                                <div class='input-group date' id='close_trader_div'>
+                                    <input type='text' class="form-control" name="close_trader" id="close_trader" required>
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div> -->
+
                         <br>
                         <div class="form-group text-center">
                             <input type="button" value="Démarrer le trader" onclick="appui_bouton();">
@@ -139,6 +153,17 @@ $fondation = 2;
         </form>
     <br>
     </body>
+    <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"> </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+
+    <script type="text/javascript" src="js/index.js"></script>
+    <script type="text/javascript">
+        localStorage.setItem('fondation', <?php echo $fondation ?>);
+    </script> -->
 
     <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
@@ -149,3 +174,5 @@ $fondation = 2;
         localStorage.setItem('fondation', <?php echo $fondation ?>);
     </script>
 </html>
+
+

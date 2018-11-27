@@ -1,0 +1,11 @@
+{
+    "name": "payicam/bar_trader",
+    "description": "Bar trader PayIcam",
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "autoload": {
+        "classmap": ["vendor/payutc-json-client/jsonclient/"],
+        "psr-0": { "CoreHelpers": "src" }
+    }
+}

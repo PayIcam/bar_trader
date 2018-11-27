@@ -1,6 +1,6 @@
-<?php 
+<?php
 
-session_start();
+require '_header.php';
 
 ?>
 

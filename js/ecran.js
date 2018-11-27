@@ -31,7 +31,7 @@ google.charts.setOnLoadCallback(graph_init);
 changement_affichage();
 changement_affichage();
 
-mise_a_jour();
+localStorage.setItem('ecran_on', 1);
 
 console.log(localStorage);
 
@@ -43,7 +43,7 @@ window.addEventListener('storage', function(e) {
 function mise_a_jour()
 {
     // Mise à jour du décompte
-    document.getElementById("decompte").innerHTML = localStorage.getItem('rafraichissement');
+    document.getElementById("decompte").innerHTML = localStorage.getItem('compteur_rafraichissement_prix');
 
     // Réponse à la consigne de départ
     localStorage.setItem('ecran_on', 1);
@@ -93,6 +93,7 @@ function changement_affichage()
             graphiques[id].push(['', boissons[id]['prix_vente_reel']/100.0]);
         }
         prix = boissons[id]['prix_vente_reel'];
+        console.log("p" + i);
         ancien_prix = document.getElementById("p" + i).innerHTML.replace('€','').replace('.','');
 
         if(prix < ancien_prix)

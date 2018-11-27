@@ -1,35 +1,53 @@
 <?php
 
-session_start();
+require '../_header.php';
 
-$datetime = $_GET['heure'];
-$fondation = $_GET['fondation'];
-
-header("Content-Type: text/xml");
-echo "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
-
-echo "<root>";
-
-include('config.php');
-
-$connexion = mysqli_connect($bdd_url, $bdd_login, $bdd_password, $bdd_database);
-
-$requete = "SELECT t_object_obj.obj_id AS id, SUM(t_purchase_pur.pur_qte) AS nombre_vendu FROM t_object_obj JOIN t_price_pri, t_purchase_pur, t_transaction_tra WHERE t_object_obj.obj_id = t_price_pri.obj_id AND t_object_obj.obj_id = t_purchase_pur.obj_id AND t_transaction_tra.tra_id = t_purchase_pur.tra_id AND obj_removed=0 AND t_object_obj.fun_id= $fondation AND tra_date > '$datetime' GROUP BY t_object_obj.obj_id ORDER BY nombre_vendu DESC";
-
-$resultat = mysqli_query($connexion, $requete);
-
-$lines = 0;
-
-while ($row = $resultat->fetch_assoc()) {
-	$id = $row['id'];
-	$nombre_vendu = $row['nombre_vendu'];
-
-	echo "<row id='$id' nombre_vendu='$nombre_vendu' />";
-
-	$lines ++;
-}
+// $article_ids = json_decode($_POST['article_ids']);
+// $sales_number = $payutcClient->getNbSell(array('obj_id' => $article_ids[0], 'fun_id' => $_POST['fondation'], 'start' => $_POST['heure']));
+// var_dump($sales_number);
+// die();
 
 
-echo "</root>";
+// var_dump($_SERVER['HTTP_X_REQUESTED_WITH']);
+// var_dump($_SERVER);
+// die();
+
+// if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+    if(!empty($_POST)) {
+        if(isset($_POST['heure']) && isset($_POST['fondation']) && isset($_POST['article_ids'])) {
+            $fun_id = intval($_POST['fondation']);
+            try{
+               $datetime = DateTime::createFromFormat("Y-m-d h:i:s",$_POST['heure']);
+            } catch(Exception $e){
+                echo "Le format de la date et de l'heure est invalide";
+                die();
+            }
+            $articles_sold = $payutcClient->getNbSells(array('obj_ids' => $_POST['article_ids'], 'fun_id' => $fun_id, 'start' => $_POST['heure']));
+
+            $purchased_ids = array_column($articles_sold, 'obj_id');
+            $article_ids = json_decode($_POST['article_ids']);
+
+            header("Content-Type: text/xml");
+            echo "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
+
+            echo "<root>";
+            foreach($articles_sold as $article_sold) {
+                echo "<row id='$article_sold->obj_id' nombre_vendu='$article_sold->nb' />";
+            }
+            foreach($article_ids as $article_id) {
+                if(!in_array($article_id, $purchased_ids)) {
+                    echo "<row id='$article_id' nombre_vendu='0' />";
+                }
+            }
+            echo "</root>";
+        } else {
+            echo "Les paramètres nécessaires ne sont pas transmis";
+        }
+    } else {
+        echo "Rien n'est transmis en POST";
+    }
+// } else {
+//     echo 'Cette page doit être appelée en Ajax';
+// }
 
 ?>

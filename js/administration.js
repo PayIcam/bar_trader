@@ -36,16 +36,17 @@ var fondation = localStorage.getItem('fondation');
 var temps_absolu_total = Math.floor((heure_fin - heure_debut) /1000);
 
 // Temps minimal entre 2 événements
-var tps_cooldown = 120;
-var cooldown = 0;
+var cooldown_animations = 2500;
+var compteur_cooldown_animations = 300;
 
 // Baisse de prix lors d'une bulle
 var pas_bulle = 20;
 var pas_krash = 20;
 
-var tps_rafraichissement = 10;
-var rafraichissement = tps_rafraichissement;
-var pas = 10;
+var temps_rafraichissement_prix = 10;
+var compteur_rafraichissement_prix = temps_rafraichissement_prix;
+var variation_par_achat = 100;
+var change_price_request = 0;
 
 var pourcentage_benefices_initial = 0.1;
 
@@ -56,22 +57,15 @@ var total_recettes = 0;
 var recettes_min = 0;
 
 // Temps de mise à jour des graphiques publics
-var tps_maj_graphiques = 20;
-var maj_graphiques = 0;
+var tps_maj_graphiques_ecran = 5;
+var compteur_maj_graphiques_ecran = 0;
 
 localStorage.setItem('message_banniere', "BIENVENUE AU BAR TRADER DE L'ICAM");
 
 var stat_evenement_krash = 0;
 var stat_evenement_bulle = 0;
 
-// Appelle la fonction requete_transactions toutes les secondes
-setInterval(requete_transactions, 1000);
-
 localStorage.setItem('ecran_on', 0);
-
-// première initialisation
-requete_transactions();
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////  Partie gestion affichage  //////////////////////////////////////////////
@@ -115,6 +109,9 @@ function pause()
     }
     document.getElementById('pause').className = 'btn btn-primary';
     document.getElementById('demarrer').className = 'btn btn-outline-success';
+
+    clearInterval(mise_a_jour_compteur_function);
+    clearInterval(requete_transactions_function);
     on_pause = true;
 }
 
@@ -133,6 +130,12 @@ function demarrer()
     }
     document.getElementById('pause').className = 'btn btn-outline-primary';
     document.getElementById('demarrer').className = 'btn btn-success';
+
+    mise_a_jour_compteur();
+    requete_transactions();
+
+    window.mise_a_jour_compteur_function = setInterval(mise_a_jour_compteur, 1000);
+    window.requete_transactions_function = setInterval(requete_transactions, 5000);
     on_pause = false;
 }
 
@@ -147,11 +150,12 @@ function reinitialiser()
         return;
     }
 
+    requete_mise_a_jour(boissons);
+
     for(var id in boissons)
     {
         boissons[id]['prix_vente_calcule'] = boissons[id]['prix_init'];
         boissons[id]['prix_vente_reel'] = boissons[id]['prix_init'];
-        requete_mise_a_jour(id, boissons[id]['prix_init']);
     }
 }
 
@@ -166,13 +170,14 @@ function stop()
         return;
     }
 
+    requete_mise_a_jour(boissons);
+
     for(var id in boissons)
     {
         boissons[id]['prix_vente_calcule'] = boissons[id]['prix_init'];
         boissons[id]['prix_vente_reel'] = boissons[id]['prix_init'];
         boissons[id]['nb_ventes'] = 0;
         boissons[id]['recette'] = 0;
-        requete_mise_a_jour(id, boissons[id]['prix_init']);
     }
     finished = true;
     update_affichage_tableau();
@@ -259,10 +264,10 @@ function get_variable_unite(numero)
 function get_variable_valeur(numero) {
     switch(numero){
         case 0:
-            return tps_rafraichissement;
+            return temps_rafraichissement_prix;
             break;
         case 1:
-            return pas;
+            return variation_par_achat;
             break;
         case 2:
             return pas_bulle;
@@ -277,10 +282,10 @@ function get_variable_valeur(numero) {
             return benefice_min;
             break;
         case 6:
-            return tps_cooldown;
+            return cooldown_animations;
             break;
         case 7:
-            return tps_maj_graphiques;
+            return tps_maj_graphiques_ecran;
             break;
         case 8:
             return localStorage.getItem('message_banniere');
@@ -291,10 +296,10 @@ function get_variable_valeur(numero) {
 function set_variable_valeur(numero, valeur) {
     switch(numero){
         case 0:
-            tps_rafraichissement = valeur;
+            temps_rafraichissement_prix = valeur;
             break;
         case 1:
-            pas = valeur;
+            variation_par_achat = valeur;
             break;
         case 2:
             pas_bulle = valeur;
@@ -311,10 +316,10 @@ function set_variable_valeur(numero, valeur) {
             localStorage.setItem("benefice_min", valeur);
             break;
         case 6:
-            tps_cooldown = valeur;
+            cooldown_animations = valeur;
             break;
         case 7:
-            tps_maj_graphiques = valeur;
+            tps_maj_graphiques_ecran = valeur;
             break;
         case 8:
             localStorage.setItem('message_banniere', valeur);
@@ -595,7 +600,7 @@ function g3_draw()
         data1.addColumn('number', 'Bénéfice Min');
 
         data1.addRows([
-          [0, - Number(benefice_max) * pourcentage_benefices_initial],
+          [0, 0],
           [temps_absolu_total, Number(benefice_min)]
         ]);
 
@@ -650,7 +655,7 @@ function update_debug()
     document.getElementById('debug6').innerHTML = finished;
     document.getElementById('debug7').innerHTML = fondation;
     document.getElementById('debug8').innerHTML = localStorage.getItem('video_en_cours');
-    document.getElementById('debug9').innerHTML = maj_graphiques;
+    document.getElementById('debug9').innerHTML = compteur_maj_graphiques_ecran;
 }
 
 
@@ -658,10 +663,7 @@ function update_debug()
 ///////////////////////////////////////////////////  Boucle Trader  ////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-// Envoie la requête AJAX pour récupérer les transactions depuis le début
-function requete_transactions()
-{
+function mise_a_jour_compteur() {
     if(finished || new Date() < heure_debut)
     {
         return;
@@ -677,25 +679,36 @@ function requete_transactions()
 
     if(localStorage.getItem('video_en_cours') == 0)
     {
-        rafraichissement --;
+        compteur_rafraichissement_prix --;
     }
 
-    if(rafraichissement < 0)
+    if(compteur_rafraichissement_prix < 0)
     {
-        rafraichissement = tps_rafraichissement;
+        compteur_rafraichissement_prix = temps_rafraichissement_prix;
+    } else if(compteur_rafraichissement_prix == 0 && localStorage.getItem('video_en_cours') == 0) {
+        console.log('change_price_request');
+        change_price_request = 1;
     }
 
-    document.getElementById('compteur_texte').innerHTML = rafraichissement;
-    localStorage.setItem('rafraichissement',  rafraichissement);
+    document.getElementById('compteur_texte').innerHTML = compteur_rafraichissement_prix;
+    localStorage.setItem('compteur_rafraichissement_prix',  compteur_rafraichissement_prix);
 
-    maj_graphiques --;
+    compteur_maj_graphiques_ecran --;
 
-    if(maj_graphiques <= 0)
+    if(compteur_maj_graphiques_ecran <= 0)
     {
-        maj_graphiques = tps_maj_graphiques;
+        compteur_maj_graphiques_ecran = tps_maj_graphiques_ecran;
         localStorage.setItem('changement_graphiques', 1);
     }
 
+    compteur_cooldown_animations --;
+
+    document.getElementById('affichage_cooldown').innerHTML = 'Cooldown : ' + compteur_cooldown_animations;
+}
+
+// Envoie la requête AJAX pour récupérer les transactions depuis le début
+function requete_transactions()
+{
     var xhr = getXMLHttpRequest();
 
     xhr.onreadystatechange = function() {
@@ -706,8 +719,12 @@ function requete_transactions()
         }
     };
 
-    xhr.open("GET", "processing/data.php?heure=" + heure_debut_pour_php + "&fondation=" + fondation);
-    xhr.send(null);
+    var article_ids = JSON.stringify(Object.keys(JSON.parse(localStorage.getItem('boissons'))));
+    var data = 'heure=' + heure_debut_pour_php + '&fondation=' + window.encodeURIComponent(fondation) + '&article_ids=' +  article_ids;
+
+    xhr.open("POST", "processing/data.php");
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhr.send(encodeURI(data));
 }
 
 // fonction principale
@@ -738,7 +755,7 @@ function loop(oData)
     document.getElementById('benef_tps_reel').innerHTML = 'Bénéfice en temps réel : ' + benefice + 'c';
     document.getElementById('stat3').innerHTML = ' ' + benefice + 'c';
 
-    if((benefice < - benefice_max * pourcentage_benefices_initial + (1 + pourcentage_benefices_initial) * benefice_min / temps_absolu_total * temps_absolu || forcer_evenement == 2) && cooldown < 0){
+    if((benefice < - benefice_max * pourcentage_benefices_initial + (1 + pourcentage_benefices_initial) * benefice_min / temps_absolu_total * temps_absolu || forcer_evenement == 2) && compteur_cooldown_animations < 0){
 
         ////////////////////////////////////////     KRACH BOURSIER    \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
@@ -757,15 +774,15 @@ function loop(oData)
         }
 
         // Force la mise a jour
-        rafraichissement = -2;
+        compteur_rafraichissement_prix = -2;
 
-        cooldown = tps_cooldown;
+        compteur_cooldown_animations = cooldown_animations;
         localStorage.setItem('video_en_cours', 2);
 
         stat_evenement_krash ++;
 
     }
-    else if((benefice >= benefice_max * pourcentage_benefices_initial + (1 - pourcentage_benefices_initial) * benefice_max / temps_absolu_total * temps_absolu || forcer_evenement == 1) && cooldown < 0)
+    else if((benefice >= benefice_max * pourcentage_benefices_initial + (1 - pourcentage_benefices_initial) * benefice_max / temps_absolu_total * temps_absolu || forcer_evenement == 1) && compteur_cooldown_animations < 0)
     {
         ////////////////////////////////////////   EXPLOSION BULLE   \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
@@ -783,9 +800,9 @@ function loop(oData)
         }
 
         // Force la mise a jour
-        rafraichissement = -2;
+        compteur_rafraichissement_prix = -2;
 
-        cooldown = tps_cooldown;
+        compteur_cooldown_animations = cooldown_animations;
         localStorage.setItem('video_en_cours', 1);
 
         stat_evenement_bulle ++;
@@ -806,12 +823,12 @@ function loop(oData)
                 if(boisson == id)
                 {
                     // On augmente le prix d'un pas par nb vendu
-                    boissons[boisson]['prix_vente_calcule'] = Number(boissons[boisson]['prix_vente_calcule']) + pas * nombre_vendu;
+                    boissons[boisson]['prix_vente_calcule'] = Number(boissons[boisson]['prix_vente_calcule']) + variation_par_achat * nombre_vendu;
                 }
                 else
                 {
                     // On réduit le prix des autres boissons
-                    var a = (pas * nombre_vendu)/(Object.keys(boissons).length - 1);
+                    var a = (variation_par_achat * nombre_vendu)/(Object.keys(boissons).length - 1);
                     if(boissons[boisson]['prix_vente_calcule'] - a >= boissons[boisson]['prix_min'])
                     {
                         boissons[boisson]['prix_vente_calcule'] = boissons[boisson]['prix_vente_calcule'] - a;
@@ -827,22 +844,22 @@ function loop(oData)
         }
     }
 
-    cooldown --;
+    // Si le délais temps_rafraichissement_prix est écoulé, on mets à jour l'affichage et les prix sur la bdd
 
-    document.getElementById('affichage_cooldown').innerHTML = 'Cooldown : ' + cooldown;
+    console.log(compteur_rafraichissement_prix);
 
-    // Si le délais tps_rafraichissement est écoulé, on mets à jour l'affichage et les prix sur la bdd
-
-    if(rafraichissement == tps_rafraichissement && localStorage.getItem('video_en_cours') == 0)
+    if(change_price_request===1)
     {
+        console.log('màj');
         mise_a_jour();
+        change_price_request=0;
     }
 
     // Si on a forcé la maj, on remet le compteur au début
-    if(rafraichissement == -2)
+    if(compteur_rafraichissement_prix == -2)
     {
         mise_a_jour();
-        rafraichissement = tps_rafraichissement;
+        compteur_rafraichissement_prix = temps_rafraichissement_prix;
     }
 
     update_affichage_tableau();
@@ -854,6 +871,9 @@ function loop(oData)
 function mise_a_jour()
 {
     var i = 0;
+
+    requete_mise_a_jour(boissons);
+
     for(var id in boissons)
     {
         prix = boissons[id]['prix_vente_calcule'];
@@ -867,9 +887,6 @@ function mise_a_jour()
         // On arroudi au centime près
         prix = Math.round(prix);
 
-        // Changement du prix dans la bdd
-        requete_mise_a_jour(id, prix);
-
         boissons[id]['prix_vente_reel'] = prix;
 
         i++;
@@ -880,12 +897,22 @@ function mise_a_jour()
 }
 
 // envoi des requêtes AJAX pour mettre a jour la bdd
-function requete_mise_a_jour(id, prix)
+function requete_mise_a_jour(articles)
 {
+    var articles_data = {};
+    for(var id in articles)
+    {
+        articles_data[id] = articles[id]['prix_init'];
+    }
+
+    var data = 'articles=' + JSON.stringify(articles_data);
+
+
     var xhr = getXMLHttpRequest();
 
-    xhr.open("GET", "processing/update_db.php?id=" + id + "&prix=" + prix);
-    xhr.send(null);
+    xhr.open("POST", "processing/update_db.php");
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhr.send(encodeURI(data));
 }
 
 function isset(strVariableName)
