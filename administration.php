@@ -158,6 +158,14 @@ require '_header.php';
                                 <div class="col-md-5"><h5 id="benefice">--</h5></div>
                             </div>
                             <div class="row">
+                                <div class="col-md-5"><h5>Bénéfice minimal actuel :</h5></div>
+                                <div class="col-md-5"><h5 id="benefice_min">--</h5></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-5"><h5>Bénéfice maximal actuel :</h5></div>
+                                <div class="col-md-5"><h5 id="benefice_max">--</h5></div>
+                            </div>
+                            <div class="row">
                                 <div class="col-md-5"><h5>Moyenne de ventes :</h5></div>
                                 <div class="col-md-5"><h5 id="stat4">--</h5></div>
                             </div>

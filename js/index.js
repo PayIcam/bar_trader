@@ -114,7 +114,7 @@ function sauvegarder()
 
     var heure_debut = new Date(date + " " + heure + ":00");
 
-    if(heure_debut< new Date()) {return "Choisissez une date de début de trader postérieure à la date actuelle"};
+    // if(heure_debut< new Date()) {return "Choisissez une date de début de trader postérieure à la date actuelle"};
 
     var heure_debut_pour_php = date + " " + heure + ":00";
 

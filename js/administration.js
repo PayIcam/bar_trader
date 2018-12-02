@@ -46,7 +46,7 @@ var pas_krach = 20;
 
 var temps_rafraichissement_prix = 10;
 var compteur_rafraichissement_prix = temps_rafraichissement_prix;
-var variation_par_achat = 100;
+var variation_par_achat = 10;
 var change_price_request = 0;
 
 var pourcentage_benefices_initial = 0.1;
@@ -110,9 +110,12 @@ function pause()
     }
     document.getElementById('pause').className = 'btn btn-primary';
     document.getElementById('demarrer').className = 'btn btn-outline-success';
-
-    clearInterval(mise_a_jour_compteur_function);
-    clearInterval(requete_transactions_function);
+    $('#demarrer').removeAttr('disabled');
+    $('#pause').attr('disabled', 'disabled');
+    if(typeof(mise_a_jour_compteur_function) != "undefined")
+        clearInterval(mise_a_jour_compteur_function);
+    if(typeof(requete_transactions_function) != "undefined")
+        clearInterval(requete_transactions_function);
     on_pause = true;
 }
 
@@ -123,6 +126,7 @@ function demarrer()
         return;
     }
 
+    on_pause = false;
     // Si l'écran n'est pas allumé
     if(localStorage.getItem('ecran_on') == 0)
     {
@@ -131,10 +135,29 @@ function demarrer()
     }
     document.getElementById('pause').className = 'btn btn-outline-primary';
     document.getElementById('demarrer').className = 'btn btn-success';
+    $('#demarrer').attr('disabled', 'disabled');
+    $('#pause').removeAttr('disabled');
+    $('#reinitialiser').removeAttr('disabled');
+    $('#stop').removeAttr('disabled');
+
+    benefice = 0;
+    total_recettes = 0;
+    total_ventes = 0;
+    for(id in boissons)
+    {
+        total_recettes += boissons[id]['recette'];
+        total_ventes += Number(boissons[id]['nb_ventes']);
+        recettes_min += boissons[id]['nb_ventes'] * boissons[id]['prix_revient'];
+    }
+
+    update_stats();
+    update_graphiques();
+    update_affichage_tableau();
+    update_debug();
+
+    benefice = total_recettes - recettes_min;
 
     mise_a_jour_bdd_ecran();
-
-    on_pause = false;
 }
 
 function reinitialiser()
@@ -159,14 +182,22 @@ function reinitialiser()
 
 function stop()
 {
-    if(finished)
-    {
+    if(finished) {
         return;
     }
-    if(!confirm("Voulez-vous stopper le trader ?"))
-    {
+
+    if(!confirm("Voulez-vous stopper le trader ?")) {
         return;
     }
+
+    $('#demarrer').attr('disabled', 'disabled');
+    $('#pause').attr('disabled', 'disabled');
+    $('#reinitialiser').attr('disabled', 'disabled');
+    $('#stop').attr('disabled', 'disabled');
+    if(typeof(mise_a_jour_compteur_function) != "undefined")
+        clearInterval(mise_a_jour_compteur_function);
+    if(typeof(requete_transactions_function) != "undefined")
+        clearInterval(requete_transactions_function);
 
     requete_mise_a_jour(boissons);
 
@@ -412,24 +443,21 @@ google.charts.setOnLoadCallback(g1_init);
 
 function update_stats()
 {
-    var stat_recette = 0;
-    var stat_ventes = 0;
     var stat_biere_plus_vendue = "";
     var stat_biere_plus_vendue_nb = 0;
     for(id in boissons)
     {
-        stat_recette += boissons[id]['recette'];
-        stat_ventes += Number(boissons[id]['nb_ventes']);
         if(Number(boissons[id]['nb_ventes']) > stat_biere_plus_vendue_nb)
         {
             stat_biere_plus_vendue_nb = Number(boissons[id]['nb_ventes']);
             stat_biere_plus_vendue = boissons[id]['nom'];
         }
     }
-    document.getElementById('stat0').innerHTML = stat_recette + 'c';
-    document.getElementById('stat1').innerHTML = ' ' + stat_ventes;
+    document.getElementById('stat0').innerHTML = total_recettes + 'c';
+    document.getElementById('stat1').innerHTML = ' ' + Number(total_ventes);
     document.getElementById('stat2').innerHTML = ' ' + stat_biere_plus_vendue + ' (' + stat_biere_plus_vendue_nb + ')';
-    document.getElementById('stat4').innerHTML = ' ' + Math.round(stat_ventes / (temps_absolu / 60)) + ' bières/minute';
+    document.getElementById('benefice').innerHTML = ' ' + benefice + 'c';
+    document.getElementById('stat4').innerHTML = ' ' + Math.round(total_ventes / (temps_absolu / 60)) + ' bières/minute';
     document.getElementById('stat5').innerHTML = ' ' + stat_evenement_krash;
     document.getElementById('stat6').innerHTML = ' ' + stat_evenement_bulle;
 }
@@ -440,8 +468,6 @@ function update_stats()
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////  Partie des graphiques  ////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-setInterval(update_graphiques, 10000);
 
 function update_graphiques()
 {
@@ -597,9 +623,14 @@ function g3_draw()
         data1.addColumn('number', 'Temps');
         data1.addColumn('number', 'Bénéfice Min');
 
+        var benef_min_initial = benefice_min/10;
+        var benef_max_initial = benefice_max/10
+        var temps_stabilisation_benef = temps_absolu_total * 0.8;
+
         data1.addRows([
-          [0, 0],
-          [temps_absolu_total, Number(benefice_min)]
+          [0, - Number(benef_min_initial)],
+          [Number(temps_stabilisation_benef), Number(benefice_min)],
+          [Number(temps_absolu_total), Number(benefice_min)]
         ]);
 
         var data2 = new google.visualization.DataTable();
@@ -607,8 +638,9 @@ function g3_draw()
         data2.addColumn('number', 'Bénéfice Max');
 
         data2.addRows([
-          [0, Number(benefice_max) * pourcentage_benefices_initial],
-          [temps_absolu_total, Number(benefice_max)]
+          [0, Number(benef_max_initial)],
+          [Number(temps_stabilisation_benef), Number(benefice_max)],
+          [Number(temps_absolu_total), Number(benefice_max)]
         ]);
 
         var joinedData = google.visualization.data.join(data1, data2, 'full', [[0, 0]], [1], [1]);
@@ -622,11 +654,6 @@ function g3_update()
 {
     if(g3_isinit)
     {
-        var benefice = 0;
-        for(id in boissons)
-        {
-            benefice += boissons[id]['recette'] - boissons[id]['nb_ventes'] * boissons[id]['prix_revient'];
-        }
         g3_data.addRow([temps_absolu, benefice]);
 
         g3_draw();
@@ -639,8 +666,6 @@ function g3_update()
 ////////////////////////////////////////////////////  Boucle Débug  ////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-setInterval(update_debug, 1000);
 
 function update_debug()
 {
@@ -672,7 +697,7 @@ function mise_a_jour_compteur() {
         return;
     }
 
-    temps_absolu = Math.floor((heure_fin - Date.now()) /1000);
+    temps_absolu = Math.floor((Date.now() - heure_debut) /1000);
 
     if(on_pause) {
         update_affichage_tableau();
@@ -744,6 +769,7 @@ function definition_nouveaux_prix_benefices(xml_response) {
             boissons[id]['nb_ventes'] = nombre_vendu_total;
 
             total_recettes += ajout_recette;
+            total_ventes += nombre_nouvelles_ventes;
             recettes_min += nombre_nouvelles_ventes * boissons[id]['prix_revient'];
 
             boissons[id]['recette'] += ajout_recette;
@@ -791,22 +817,33 @@ function should_trader_krach_or_bubble() {
         var coefficient_multiplicatif_benefice_max = 0.1 + quotient_temps * (9/8);
         var coefficient_multiplicatif_benefice_min = -0.1 + quotient_temps * (11/8);
     } else {
-        var coefficient_multiplicatif_benefice_maxs = 1;
+        var coefficient_multiplicatif_benefice_max = 1;
         var coefficient_multiplicatif_benefice_min = 1;
     }
 
-    var actuel_benefice_max = benefice_max * coefficient_multiplicatif_benefice_max;
-    var actuel_benefice_min = benefice_min * coefficient_multiplicatif_benefice_min;
+    actuel_benefice_max = benefice_max * coefficient_multiplicatif_benefice_max;
+    actuel_benefice_min = benefice_min * coefficient_multiplicatif_benefice_min;
 
-    console.log(benefice);
-    console.log(actuel_benefice_max);
-    console.log(actuel_benefice_min);
+    // console.log(benefice);
+    // console.log(benefice_max);
+    // console.log(benefice_min);
+
+    // console.log(coefficient_multiplicatif_benefice_max);
+    // console.log(coefficient_multiplicatif_benefice_min);
+    // console.log(actuel_benefice_max);
+    // console.log(actuel_benefice_min);
 
     if(benefice > actuel_benefice_max) {
+        console.log('bulle');
         return 'bulle';
     } else if(benefice < actuel_benefice_min) {
+        console.log(benefice);
+        console.log(actuel_benefice_min);
+        console.log(benefice < actuel_benefice_min);
+        console.log('krach');
         return 'krach';
     } else {
+        console.log(false);
         return false;
     }
 }
@@ -820,6 +857,7 @@ function maj_prix_bulle() {
             boissons[id]['prix_vente_calcule'] -= pas_bulle;
         }
     }
+    localStorage.setItem('video_en_cours', 1);
     stat_evenement_bulle ++;
 }
 function maj_prix_krach() {
@@ -831,6 +869,7 @@ function maj_prix_krach() {
             boissons[id]['prix_vente_calcule'] += pas_krach;
         }
     }
+    localStorage.setItem('video_en_cours', 2);
     stat_evenement_krash ++;
 }
 
@@ -846,7 +885,6 @@ function do_event(event) {
     }
 
     compteur_cooldown_animations = cooldown_animations;
-    localStorage.setItem('video_en_cours', 1);
 
     stat_evenement_bulle ++;
 
@@ -867,15 +905,20 @@ function fonction_principale(xml_response) {
     definition_nouveaux_prix_benefices(xml_response);
 
     var event = should_trader_krach_or_bubble();
+    console.log(event);
     if(event !== false) {
         do_event(event);
     }
 
     document.getElementById('benef_tps_reel').innerHTML = 'Bénéfice en temps réel : ' + benefice + 'c';
     document.getElementById('benefice').innerHTML = ' ' + benefice + 'c';
+    document.getElementById('benefice_min').innerHTML = ' ' + actuel_benefice_max + 'c';
+    document.getElementById('benefice_max').innerHTML = ' ' + actuel_benefice_min + 'c';
 
     update_affichage_tableau();
     update_stats();
+    update_graphiques();
+    update_debug();
 }
 
 // Mise à jour de la bdd et de l'affichage
