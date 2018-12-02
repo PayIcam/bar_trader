@@ -15,6 +15,7 @@ require '_header.php';
         <link rel="stylesheet" href="css/ecran.css" />
         <link rel="shortcut icon" type="image/x-icon" href="img/logo.png" />
 
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
          <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     </head>
 
@@ -81,6 +82,36 @@ $date = strftime("%A %d %B %Y");  $heure = strftime("%H:%M:%S");
                           <td id="p7"></td>
                           <td id="q7"></td>
                         </tr>
+                        <tr>
+                          <td id="n19"></td>
+                          <td id="p19"></td>
+                          <td id="q19"></td>
+                        </tr>
+                        <tr>
+                          <td id="n20"></td>
+                          <td id="p20"></td>
+                          <td id="q20"></td>
+                        </tr>
+                        <tr>
+                          <td id="n21"></td>
+                          <td id="p21"></td>
+                          <td id="q21"></td>
+                        </tr>
+                        <tr>
+                          <td id="n22"></td>
+                          <td id="p22"></td>
+                          <td id="q22"></td>
+                        </tr>
+                        <tr>
+                          <td id="n23"></td>
+                          <td id="p23"></td>
+                          <td id="q23"></td>
+                        </tr>
+                        <tr>
+                          <td id="n24"></td>
+                          <td id="p24"></td>
+                          <td id="q24"></td>
+                        </tr>
                       </tbody>
                     </table>
                 </div>
@@ -129,6 +160,36 @@ $date = strftime("%A %d %B %Y");  $heure = strftime("%H:%M:%S");
                           <td id="n15"></td>
                           <td id="p15"></td>
                           <td id="q15"></td>
+                        </tr>
+                        <tr>
+                          <td id="n16"></td>
+                          <td id="p16"></td>
+                          <td id="q16"></td>
+                        </tr>
+                        <tr>
+                          <td id="n17"></td>
+                          <td id="p17"></td>
+                          <td id="q17"></td>
+                        </tr>
+                        <tr>
+                          <td id="n18"></td>
+                          <td id="p18"></td>
+                          <td id="q18"></td>
+                        </tr>
+                        <tr>
+                          <td id="n25"></td>
+                          <td id="p25"></td>
+                          <td id="q25"></td>
+                        </tr>
+                        <tr>
+                          <td id="n26"></td>
+                          <td id="p26"></td>
+                          <td id="q26"></td>
+                        </tr>
+                        <tr>
+                          <td id="n27"></td>
+                          <td id="p27"></td>
+                          <td id="q27"></td>
                         </tr>
                     </table>
                 </div>

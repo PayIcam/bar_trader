@@ -20,7 +20,7 @@ function selectionArticle(element)
         colonne.innerHTML = nom;
 
         var colonne = ligne.insertCell(2);
-        colonne.innerHTML = prix;
+        colonne.innerHTML = '<input class="form-control" type="number" id="prix_initial' + id + '" value="' + prix + '">';
 
         var colonne = ligne.insertCell(3);
         colonne.innerHTML = '<input class="form-control" type="number" id="prix_min' + id + '">';
@@ -72,7 +72,7 @@ function sauvegarder()
         // On récupère toutes les valeurs de l'élément
         var id           = Number(tableau.rows[i].cells[0].innerHTML);
         var nom          = tableau.rows[i].cells[1].innerHTML;
-        var prix_initial = Number(tableau.rows[i].cells[2].innerHTML);
+        var prix_initial = Number(document.getElementById("prix_initial" + id).value);
         var prix_minimal = Number(document.getElementById("prix_min" + id).value);
         var prix_revient = Number(document.getElementById("prix_revient" + id).value);
 
@@ -102,8 +102,8 @@ function sauvegarder()
     if(document.getElementById("date_debut").value == ""){return "Veillez saisir une date de début";}
     if(document.getElementById("heure_fin").value == ""){return "Veillez saisir une heure de fin";}
     if(document.getElementById("date_fin").value == ""){return "Veillez saisir une date de fin";}
-    //if(document.getElementById("date_fin").value < document.getElementById("date_debut").value){return "La date de fin doit être supérieure à celle de début";}
-    //else if(document.getElementById("heure_fin").value <= document.getElementById("heure_debut").value){return "L'heure de fin doit être supérieure à celle de début";}
+    if(document.getElementById("date_fin").value < document.getElementById("date_debut").value){return "La date de fin doit être supérieure à celle de début";}
+    else if(document.getElementById("heure_fin").value <= document.getElementById("heure_debut").value){return "L'heure de fin doit être supérieure à celle de début";}
 
     // Récupération des valeurs diverses
     var benefice_max = Number(document.getElementById("benefice_max").value);
@@ -113,6 +113,9 @@ function sauvegarder()
     var heure = document.getElementById("heure_debut").value;
 
     var heure_debut = new Date(date + " " + heure + ":00");
+
+    if(heure_debut< new Date()) {return "Choisissez une date de début de trader postérieure à la date actuelle"};
+
     var heure_debut_pour_php = date + " " + heure + ":00";
 
     var date = document.getElementById("date_fin").value;
