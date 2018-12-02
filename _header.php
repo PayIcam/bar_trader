@@ -54,13 +54,10 @@ if(!in_array($route, ['login.php', 'callback.php'])) {
             $admin_fundations = $payutc_admin->getFundations();
             $admin_fundation_ids = array_column($admin_fundations, 'fun_id');
             if(!in_array($_CONFIG['bar_fun_id'], $admin_fundation_ids)) {
-                die('fpdp');
                 header('Location: ..');
                 die();
             }
         } catch(JsonClient\JsonException $e) {
-            var_dump($e);
-            die('fdp');
             header('Location: ..');
             die();
         }

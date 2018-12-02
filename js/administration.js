@@ -662,7 +662,6 @@ function update_debug()
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function update_done() {
-    console.log('fdp');
     compteur_rafraichissement_prix = temps_rafraichissement_prix;
     window.mise_a_jour_compteur_function = setInterval(mise_a_jour_compteur, 1000);
     window.requete_transactions_function = setInterval(requete_transactions, 5000);
