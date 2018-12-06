@@ -1,5 +1,8 @@
 body
 {
+    /*color:black;
+    background-color:white;*/
+    /*background-image:url(../img/trader.png);*/
 	background-color: #04000C;
 	/*margin-top: 12vh;*/
 	font-size: 25px;
@@ -8,6 +11,33 @@ body
 	width: 100%;
   	margin-top: 250px;
   	overflow: hidden;
+}
+
+#final_stats {
+    margin-top: 2%;
+}
+
+.winners {
+    font-size: 2em;
+    font-weight: bold;
+    color: #FF882D;
+}
+
+#users {
+    margin-bottom: 3%
+}
+#users thead {
+    font-size: 1.5em;
+}
+#articles {
+    font-size: 1.3em;
+}
+
+.resultats {
+    font-size: 2.5em;
+}
+#participants, #bieres {
+    font-weight: bold;
 }
 
 .table-borderless > tbody > tr > td

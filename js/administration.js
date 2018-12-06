@@ -171,13 +171,14 @@ function reinitialiser()
         return;
     }
 
-    requete_mise_a_jour(boissons);
-
     for(var id in boissons)
     {
         boissons[id]['prix_vente_calcule'] = boissons[id]['prix_init'];
         boissons[id]['prix_vente_reel'] = boissons[id]['prix_init'];
     }
+
+    requete_mise_a_jour(boissons);
+
 }
 
 function stop()
@@ -189,6 +190,9 @@ function stop()
     if(!confirm("Voulez-vous stopper le trader ?")) {
         return;
     }
+
+    localStorage.setItem('final_stats', false);
+    localStorage.setItem('video_en_cours', 0);
 
     $('#demarrer').attr('disabled', 'disabled');
     $('#pause').attr('disabled', 'disabled');
@@ -208,12 +212,28 @@ function stop()
         boissons[id]['nb_ventes'] = 0;
         boissons[id]['recette'] = 0;
     }
+
     finished = true;
     update_affichage_tableau();
 
     document.getElementById('pause').className = 'btn btn-outline-primary';
     document.getElementById('demarrer').className = 'btn btn-outline-success';
     document.getElementById('stop').className = 'btn btn-danger';
+
+    var article_ids = JSON.stringify(Object.keys(JSON.parse(localStorage.getItem('boissons'))));
+    var data = 'heure=' + heure_debut_pour_php + '&fondation=' + window.encodeURIComponent(fondation) + '&article_ids=' +  article_ids;
+
+    $.post("processing/final_stats.php", {article_ids: article_ids, start: heure_debut_pour_php, fun_id: window.encodeURIComponent(fondation)}, set_final_stats);
+}
+
+function set_final_stats(data) {
+    data = JSON.parse(data);
+    final_stats = {bar_stats: data.bar_stats, best_performers: data.best_performers, most_gained: data.most_gained, most_payed: data.most_payed, article_stats: data.article_stats};
+    console.log(final_stats);
+}
+
+function display_final_stats() {
+    localStorage.setItem('final_stats', JSON.stringify(final_stats));
 }
 
 // Par défaut, affichage de la page 0
@@ -394,7 +414,10 @@ function update_affichage_tableau(){
             var cellule = ligne.insertCell(-1);
             if(e == 'prix_vente_calcule'){
                 cellule.outerHTML = '<th><button type="button" class="btn btn-primary btn-sm" onclick="modifier_prix(' + id + ');"><i class="fas fa-pencil-alt"></i></button> ' + boissons[id][e] + '</th>';
-            }else{
+            } else if(e == 'nb_ventes') {
+                cellule.outerHTML = "<th>" + boissons[id][e] + " (" + boissons[id]['max_une_fois'] + ")" + "</th>";
+            }
+            else{
                 cellule.outerHTML = "<th>" + boissons[id][e] + "</th>";
             }
         }
@@ -687,9 +710,14 @@ function update_debug()
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function update_done() {
-    compteur_rafraichissement_prix = temps_rafraichissement_prix;
-    window.mise_a_jour_compteur_function = setInterval(mise_a_jour_compteur, 1000);
-    window.requete_transactions_function = setInterval(requete_transactions, 5000);
+    if(!finished) {
+        compteur_rafraichissement_prix = temps_rafraichissement_prix;
+        window.mise_a_jour_compteur_function = setInterval(mise_a_jour_compteur, 1000);
+        window.requete_transactions_function = setInterval(requete_transactions, 5000);
+    } else {
+        compteur_rafraichissement_prix = 20;
+        window.compteur_fin_function = setInterval(compteur_fin, 1000);
+    }
 }
 
 function mise_a_jour_compteur() {
@@ -725,6 +753,17 @@ function mise_a_jour_compteur() {
     compteur_cooldown_animations --;
 
     document.getElementById('affichage_cooldown').innerHTML = 'Cooldown : ' + compteur_cooldown_animations;
+}
+
+function compteur_fin() {
+    compteur_rafraichissement_prix --;
+    document.getElementById('compteur_texte').innerHTML = compteur_rafraichissement_prix;
+    localStorage.setItem('compteur_rafraichissement_prix',  compteur_rafraichissement_prix);
+
+    if(compteur_rafraichissement_prix ==0) {
+        clearInterval(compteur_fin_function);
+        display_final_stats();
+    }
 }
 
 // Envoie la requête AJAX pour récupérer les transactions depuis le début
@@ -767,12 +806,12 @@ function definition_nouveaux_prix_benefices(xml_response) {
             var nombre_articles = Object.keys(boissons).length;
 
             boissons[id]['nb_ventes'] = nombre_vendu_total;
+            boissons[id]['max_une_fois'] = Math.max(boissons[id]['max_une_fois'], nombre_nouvelles_ventes);
+            boissons[id]['recette'] += ajout_recette;
 
             total_recettes += ajout_recette;
             total_ventes += nombre_nouvelles_ventes;
             recettes_min += nombre_nouvelles_ventes * boissons[id]['prix_revient'];
-
-            boissons[id]['recette'] += ajout_recette;
 
             for(var boisson in boissons) {
                 if(boisson == id) {
@@ -824,26 +863,11 @@ function should_trader_krach_or_bubble() {
     actuel_benefice_max = benefice_max * coefficient_multiplicatif_benefice_max;
     actuel_benefice_min = benefice_min * coefficient_multiplicatif_benefice_min;
 
-    // console.log(benefice);
-    // console.log(benefice_max);
-    // console.log(benefice_min);
-
-    // console.log(coefficient_multiplicatif_benefice_max);
-    // console.log(coefficient_multiplicatif_benefice_min);
-    // console.log(actuel_benefice_max);
-    // console.log(actuel_benefice_min);
-
     if(benefice > actuel_benefice_max) {
-        console.log('bulle');
         return 'bulle';
     } else if(benefice < actuel_benefice_min) {
-        console.log(benefice);
-        console.log(actuel_benefice_min);
-        console.log(benefice < actuel_benefice_min);
-        console.log('krach');
         return 'krach';
     } else {
-        console.log(false);
         return false;
     }
 }
@@ -905,7 +929,6 @@ function fonction_principale(xml_response) {
     definition_nouveaux_prix_benefices(xml_response);
 
     var event = should_trader_krach_or_bubble();
-    console.log(event);
     if(event !== false) {
         do_event(event);
     }
@@ -941,8 +964,6 @@ function mise_a_jour_bdd_ecran() {
 // envoi des requêtes AJAX pour mettre a jour la bdd
 function requete_mise_a_jour(articles)
 {
-    localStorage.setItem('compteur_rafraichissement_prix',  'Mise à jour en cours');
-
     var articles_data = {};
     for(var id in articles) {
         articles_data[id] = articles[id]['prix_vente_reel'];

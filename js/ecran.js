@@ -8,9 +8,9 @@ var couleur = new Array("red","green","#13138D","#89138D","#845309","#841909","#
 // On cache l'écran d'alerte video
 document.getElementById("alert_info1").style.display = 'none';
 document.getElementById("alert_info2").style.display = 'none';
+$('#final_stats').hide();
 lecteur_video1.pause();
 lecteur_video2.pause();
-
 
 // A la fin d'une animation video, on cache l'ecran d'alerte
 lecteur_video1.onended = function()
@@ -37,46 +37,80 @@ console.log(localStorage);
 
 // Si il y a modification des variables dans localStorage, on mets à jour
 window.addEventListener('storage', function(e) {
-  mise_a_jour();
+    mise_a_jour(e);
 });
 
-function mise_a_jour()
+function mise_a_jour(e)
 {
-    // Mise à jour du décompte
-    document.getElementById("decompte").innerHTML = localStorage.getItem('compteur_rafraichissement_prix');
+    if(localStorage.getItem('final_stats') == 'false') {
+        // Mise à jour du décompte
+        document.getElementById("decompte").innerHTML = localStorage.getItem('compteur_rafraichissement_prix');
 
-    // Réponse à la consigne de départ
-    localStorage.setItem('ecran_on', 1);
+        // Réponse à la consigne de départ
+        localStorage.setItem('ecran_on', 1);
 
-    // Consigne de mise à jour de l'affichage
-    if(localStorage.getItem('changement_affichage') == 1){
-        changement_affichage();
-        localStorage.setItem('changement_affichage', 0);
-    }
+        // Consigne de mise à jour de l'affichage
+        if(localStorage.getItem('changement_affichage') == 1){
+            changement_affichage();
+            localStorage.setItem('changement_affichage', 0);
+        }
 
-    // Consigne de mise à jour des graphiques
-    if(localStorage.getItem('changement_graphiques') == 1){
-        changement_graphiques();
-        localStorage.setItem('changement_graphiques', 0);
-    }
+        // Consigne de mise à jour des graphiques
+        if(localStorage.getItem('changement_graphiques') == 1){
+            changement_graphiques();
+            localStorage.setItem('changement_graphiques', 0);
+        }
 
-    // consignes de lecture de videos
-    if(localStorage.getItem('video_en_cours') == 1)
-    {
-        lecteur_video1.play();
-        document.getElementById("alert_info1").style.display = 'inline';
-    }
+        // consignes de lecture de videos
+        if(localStorage.getItem('video_en_cours') == 1)
+        {
+            lecteur_video1.play();
+            document.getElementById("alert_info1").style.display = 'inline';
+        }
 
-    if(localStorage.getItem('video_en_cours') == 2)
-    {
-        lecteur_video2.play();
-        document.getElementById("alert_info2").style.display = 'inline';
-    }
+        if(localStorage.getItem('video_en_cours') == 2)
+        {
+            lecteur_video2.play();
+            document.getElementById("alert_info2").style.display = 'inline';
+        }
 
-    // Si le message de la bannière change
-    if(document.getElementById("banniere").innerHTML != localStorage.getItem('message_banniere'))
-    {
-        changement_banniere();
+        // Si le message de la bannière change
+        if(document.getElementById("banniere").innerHTML != localStorage.getItem('message_banniere'))
+        {
+            changement_banniere();
+        }
+    } else if(e.key == 'final_stats') {
+        $('body').css('margin', 0);
+        console.log('once');
+        $('#to_hide').hide();
+        $('#final_stats').show();
+        var final_stats = JSON.parse(localStorage.getItem('final_stats'));
+        console.log(final_stats);
+        var article_stats = final_stats.article_stats;
+        var bar_stats = final_stats.bar_stats;
+        var best_performers = final_stats.best_performers;
+        var most_gained = final_stats.most_gained;
+        var rows = "";
+        for(var id in article_stats) {
+            var row = $("<tr></tr>");
+            $("<th></th>").text(article_stats[id].obj_name).appendTo(row);
+            $("<td></td>").text(article_stats[id].nombre_bieres).appendTo(row);
+            $("<td></td>").text(article_stats[id].moyenne_prix + ' €').appendTo(row);
+            $("<td></td>").text(article_stats[id].max + ' €').appendTo(row);
+            $("<td></td>").text(article_stats[id].min + ' €').appendTo(row);
+            $('#articles tbody').append(row);
+        }
+        $("#participants").text(bar_stats[0].participants);
+        $("#bieres").text(bar_stats[0].nombre_bieres);
+
+        for(var id in best_performers) {
+            var row = $("<tr></tr>");
+            var rang = Number(id) + 1;
+            $("<th></th>").html('<span class="winners">' + rang + '</span>').appendTo(row);
+            $("<td></td>").html('<span class="winners">' + best_performers[id].usr_firstname + ' ' + best_performers[id].usr_lastname + '</span>').appendTo(row);
+            $("<td></td>").html('<span class="winners">' + best_performers[id].usr_firstname + ' ' + best_performers[id].usr_lastname + '</span>').appendTo(row);
+            $('#users tbody').append(row);
+        }
     }
 }
 
@@ -93,7 +127,6 @@ function changement_affichage()
             graphiques[id].push(['', boissons[id]['prix_vente_reel']/100.0]);
         }
         prix = boissons[id]['prix_vente_reel'];
-        console.log("p" + i);
         ancien_prix = document.getElementById("p" + i).innerHTML.replace('€','').replace('.','');
 
         if(prix < ancien_prix)

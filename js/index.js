@@ -90,6 +90,7 @@ function sauvegarder()
         boisson["prix_min"]           = prix_minimal;
         boisson["nb_ventes"]          = 0;
         boisson["recette"]            = 0;
+        boisson["max_une_fois"] = 0;
 
         boissons[id] = boisson;
     }
@@ -114,7 +115,7 @@ function sauvegarder()
 
     var heure_debut = new Date(date + " " + heure + ":00");
 
-    // if(heure_debut< new Date()) {return "Choisissez une date de début de trader postérieure à la date actuelle"};
+    if(heure_debut< new Date()) {return "Choisissez une date de début de trader postérieure à la date actuelle"};
 
     var heure_debut_pour_php = date + " " + heure + ":00";
 
@@ -144,6 +145,7 @@ function sauvegarder()
     localStorage.setItem('heure_fin', heure_fin);
     localStorage.setItem('changement_affichage', 0);
     localStorage.setItem('video_en_cours', 0);
+    localStorage.setItem('final_stats', false);
     return null;
 }
 
