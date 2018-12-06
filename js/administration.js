@@ -37,8 +37,8 @@ var fondation = localStorage.getItem('fondation');
 var temps_absolu_total = Math.floor((heure_fin - heure_debut) /1000);
 
 // Temps minimal entre 2 événements
-var cooldown_animations = 2500;
-var compteur_cooldown_animations = 300;
+var cooldown_animations = 300;
+var compteur_cooldown_animations = 600;
 
 // Baisse de prix lors d'une bulle
 var pas_bulle = 20;
@@ -171,6 +171,11 @@ function reinitialiser()
         return;
     }
 
+    if(typeof(mise_a_jour_compteur_function) != "undefined")
+        clearInterval(mise_a_jour_compteur_function);
+    if(typeof(requete_transactions_function) != "undefined")
+        clearInterval(requete_transactions_function);
+
     for(var id in boissons)
     {
         boissons[id]['prix_vente_calcule'] = boissons[id]['prix_init'];
@@ -203,8 +208,6 @@ function stop()
     if(typeof(requete_transactions_function) != "undefined")
         clearInterval(requete_transactions_function);
 
-    requete_mise_a_jour(boissons);
-
     for(var id in boissons)
     {
         boissons[id]['prix_vente_calcule'] = boissons[id]['prix_init'];
@@ -212,6 +215,7 @@ function stop()
         boissons[id]['nb_ventes'] = 0;
         boissons[id]['recette'] = 0;
     }
+    requete_mise_a_jour(boissons);
 
     finished = true;
     update_affichage_tableau();
@@ -715,7 +719,7 @@ function update_done() {
         window.mise_a_jour_compteur_function = setInterval(mise_a_jour_compteur, 1000);
         window.requete_transactions_function = setInterval(requete_transactions, 5000);
     } else {
-        compteur_rafraichissement_prix = 20;
+        compteur_rafraichissement_prix = 60;
         window.compteur_fin_function = setInterval(compteur_fin, 1000);
     }
 }
@@ -851,6 +855,7 @@ function should_trader_krach_or_bubble() {
         }
     }
 
+
     var quotient_temps = temps_absolu/temps_absolu_total;
     if(quotient_temps <0.8) {
         var coefficient_multiplicatif_benefice_max = 0.1 + quotient_temps * (9/8);
@@ -863,6 +868,9 @@ function should_trader_krach_or_bubble() {
     actuel_benefice_max = benefice_max * coefficient_multiplicatif_benefice_max;
     actuel_benefice_min = benefice_min * coefficient_multiplicatif_benefice_min;
 
+    if(cooldown_animations >0) {
+        return false;
+    }
     if(benefice > actuel_benefice_max) {
         return 'bulle';
     } else if(benefice < actuel_benefice_min) {
