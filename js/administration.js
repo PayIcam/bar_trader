@@ -223,11 +223,6 @@ function stop()
     document.getElementById('pause').className = 'btn btn-outline-primary';
     document.getElementById('demarrer').className = 'btn btn-outline-success';
     document.getElementById('stop').className = 'btn btn-danger';
-
-    var article_ids = JSON.stringify(Object.keys(JSON.parse(localStorage.getItem('boissons'))));
-    var data = 'heure=' + heure_debut_pour_php + '&fondation=' + window.encodeURIComponent(fondation) + '&article_ids=' +  article_ids;
-
-    $.post("processing/final_stats.php", {article_ids: article_ids, start: heure_debut_pour_php, fun_id: window.encodeURIComponent(fondation)}, set_final_stats);
 }
 
 function set_final_stats(data) {
@@ -719,6 +714,11 @@ function update_done() {
         window.mise_a_jour_compteur_function = setInterval(mise_a_jour_compteur, 1000);
         window.requete_transactions_function = setInterval(requete_transactions, 5000);
     } else {
+        var article_ids = JSON.stringify(Object.keys(JSON.parse(localStorage.getItem('boissons'))));
+        var data = 'heure=' + heure_debut_pour_php + '&fondation=' + window.encodeURIComponent(fondation) + '&article_ids=' +  article_ids;
+
+        $.post("processing/final_stats.php", {article_ids: article_ids, start: heure_debut_pour_php, fun_id: window.encodeURIComponent(fondation)}, set_final_stats);
+
         compteur_rafraichissement_prix = 60;
         window.compteur_fin_function = setInterval(compteur_fin, 1000);
     }
