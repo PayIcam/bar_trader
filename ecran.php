@@ -35,7 +35,7 @@ require '_header.php';
                 <thead>
                     <tr>
                         <th>Rang</th>
-                        <th>Plus gros gains d'argent</th>
+                        <th>Meilleures économies</th>
                         <th>Meilleures affaires</th>
                     </tr>
                 </thead>
