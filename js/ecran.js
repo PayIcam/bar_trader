@@ -107,7 +107,7 @@ function mise_a_jour(e)
             var row = $("<tr></tr>");
             var rang = Number(id) + 1;
             $("<th></th>").html('<span class="winners">' + rang + '</span>').appendTo(row);
-            $("<td></td>").html('<span class="winners">' + best_performers[id].usr_firstname + ' ' + best_performers[id].usr_lastname + '</span>').appendTo(row);
+            $("<td></td>").html('<span class="winners">' + most_gained[id].usr_firstname + ' ' + most_gained[id].usr_lastname + '</span>').appendTo(row);
             $("<td></td>").html('<span class="winners">' + best_performers[id].usr_firstname + ' ' + best_performers[id].usr_lastname + '</span>').appendTo(row);
             $('#users tbody').append(row);
         }
