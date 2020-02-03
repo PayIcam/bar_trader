@@ -185,13 +185,13 @@ require '_header.php';
                                 <div class="col-6">
                                     <button class="button button_image" onclick="forcer_evenement = 1;">
                                         <h3>Déclenche l'explosion de la bulle !</h3>
-                                        <img src="img/video1.jpg" style="width: 100%; height: 50vh;">
+                                        <img src="img/video1.JPG" style="width: 100%; height: 50vh;">
                                     </button>
                                 </div>
                                 <div class="col-6">
                                     <button class="button button_image" onclick="forcer_evenement = 2;">
                                         <h3>Déclenche un krach boursier !</h3>
-                                        <img src="img/video2.jpg" style="width: 100%; height: 50vh;">
+                                        <img src="img/video2.JPG" style="width: 100%; height: 50vh;">
                                     </button>
                                 </div>
                             </div>

@@ -886,7 +886,7 @@ function maj_prix_bulle() {
         if(boissons[id]['prix_vente_calcule'] - pas_bulle > boissons[id]['prix_init']) {
             boissons[id]['prix_vente_calcule'] = boissons[id]['prix_init'];
         } else {
-            boissons[id]['prix_vente_calcule'] -= pas_bulle;
+            boissons[id]['prix_vente_calcule'] += pas_bulle;
         }
     }
     localStorage.setItem('video_en_cours', 1);
@@ -898,7 +898,7 @@ function maj_prix_krach() {
         if(boissons[id]['prix_vente_calcule'] + pas_krach < boissons[id]['prix_revient']) {
             boissons[id]['prix_vente_calcule'] = boissons[id]['prix_revient'];
         } else {
-            boissons[id]['prix_vente_calcule'] += pas_krach;
+            boissons[id]['prix_vente_calcule'] -= pas_krach;
         }
     }
     localStorage.setItem('video_en_cours', 2);
