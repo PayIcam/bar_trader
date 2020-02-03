@@ -38,7 +38,7 @@ var temps_absolu_total = Math.floor((heure_fin - heure_debut) /1000);
 
 // Temps minimal entre 2 événements
 var cooldown_animations = 300;
-var compteur_cooldown_animations = 600;
+var compteur_cooldown_animations = 0;
 
 // Baisse de prix lors d'une bulle
 var pas_bulle = 20;
