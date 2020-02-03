@@ -719,7 +719,7 @@ function update_done() {
 
         $.post("processing/final_stats.php", {article_ids: article_ids, start: heure_debut_pour_php, fun_id: window.encodeURIComponent(fondation)}, set_final_stats);
 
-        compteur_rafraichissement_prix = 60;
+        compteur_rafraichissement_prix = 10;
         window.compteur_fin_function = setInterval(compteur_fin, 1000);
     }
 }
